@@ -20,6 +20,7 @@ public class Lexer {
     public static final String ASSMTTOKEN="ASSMT";
     public static final String PLUSTOKEN="PLUS";
     public static final String EOFTOKEN="EOF";
+    public static Token ArrayList
 
     /**
      * call getInput to get the file data into our buffer
@@ -51,13 +52,44 @@ public class Lexer {
      * Return all the token in the file
      * @return ArrayList of Token
      */
-    // So this is my alogirthm, I want it to check if it's a letter, then move to the next, if it's a letter or integer keep moving
+    // So this is my algoirthm, I want it to check if it's a letter, then move to the next, if it's a letter or integer keep moving
     public ArrayList<Token> getAllTokens(){
         //TODO: place your code here for lexing file
+        ArrayList<Token> tokens = new ArrayList<Token>();
         for (int i = 0; i < buffer.length(); i++) {
-            char ch = buffer.charAt(i);
-            if (Character.isLetter(ch)) {
+            char ch1 = buffer.charAt(i);
+            if (Character.isLetter(ch1)) {
                 int startIndex = i;
+                for (int j = startIndex + 1; j < (buffer.length() - (startIndex + 1)); j++) {
+                    char ch2 = buffer.charAt(j);
+                    if (Character.isLetter(ch2) || Character.isDigit(ch2)) {
+                        continue;
+                    } else {
+                        int endIndex = j - 1;
+                        Token token = new Token(IDTOKEN, buffer.substring(startIndex, endIndex));
+                        tokens.add(token);
+                        break;
+                    }
+                }
+            } else if (Character.isDigit(ch1)) {
+                int startIndex = i;
+                for (int k = startIndex + 1; k < buffer.length() - (startIndex + 1); k++) {
+                    char ch3 = buffer.charAt(k);
+                    if (Character.isDigit(ch3)) {
+                        continue;
+                    } else {
+                        int endIndex = k - 1;
+                        Token token = new Token(INTTOKEN, buffer.substring(startIndex, endIndex));
+                        tokens.add(token);
+                    }
+            }
+        }
+
+                    if (Character.isLetter(buffer.charAt(i)))
+
+
+
+
 
                 int endIndex;
                 // startIndex, endIndex ;
@@ -72,7 +104,7 @@ public class Lexer {
                 // Then it's an unknown like '$'
             }
         }
-        return new ArrayList<Token>(); // don't forget to change the return statement
+        return tokens; // don't forget to change the return statement
     }
 /**
  * *ID:* starts with a letter followed by 0 or more letters and digits.
