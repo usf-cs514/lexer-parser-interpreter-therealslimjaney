@@ -51,12 +51,40 @@ public class Lexer {
      * Return all the token in the file
      * @return ArrayList of Token
      */
-
+    // So this is my alogirthm, I want it to check if it's a letter, then move to the next, if it's a letter or integer keep moving
     public ArrayList<Token> getAllTokens(){
         //TODO: place your code here for lexing file
+        for (int i = 0; i < buffer.length(); i++) {
+            char ch = buffer.charAt(i);
+            if (Character.isLetter(ch)) {
+                int startIndex = i;
+
+                int endIndex;
+                // startIndex, endIndex ;
+                // stringCopied = buffer.substring(startIndex, endIndex)
+                // If it starts with a letter, I must take that letter and all the letters and digits that follow, until I hit an '=', '+', or '$'
+                // - its has type ID, then get it's value, and index = i after first token done
+            } else if (ch == '=') {
+                // If it's an equals, it must be made an assignment 'ASSMTTOKEN'
+            } else if (ch == '+') {
+                // If it's a plus it's a plus 'PLUSTOKEN'
+            } else {
+                // Then it's an unknown like '$'
+            }
+        }
         return new ArrayList<Token>(); // don't forget to change the return statement
     }
-
+/**
+ * *ID:* starts with a letter followed by 0 or more letters and digits.
+ *
+ * *INT*: a sequence of digits
+ *
+ * *ASSMT*: a single ‘=’
+ *
+ * *PLUS*: a single ‘+’
+ *
+ * *UNKNOWN*: e.g., ‘$’
+ */
 
 
 
@@ -84,4 +112,8 @@ public class Lexer {
 
     }
 }
-	
+
+/**- Lexer should have a getNextToken method with no params that returns a single token
+ - Lexer should have private methods for getIdentifier and getInteger, called by getNextToken,
+ that return a token and fill in value.
+ */
