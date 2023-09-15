@@ -15,49 +15,118 @@ public class Lexer {
 
     String buffer;
     int index = 0;
-    public static final String INTTOKEN="INT";
-    public static final String IDTOKEN="ID";
-    public static final String ASSMTTOKEN="ASSMT";
-    public static final String PLUSTOKEN="PLUS";
-    public static final String EOFTOKEN="EOF";
-    public static Token ArrayList
+    public static final String INTTOKEN = "INT";
+    public static final String IDTOKEN = "ID";
+    public static final String ASSMTTOKEN = "ASSMT";
+    public static final String PLUSTOKEN = "PLUS";
+    public static final String UNKNOWN = "UNKNOWN"; // I added this
+    public static final String EOFTOKEN = "EOF"; // I added this
+    public static final String MULTIPLY = "MULTIPLY"; // I added this
+    public static final String DIVIDE = "DIVIDE"; // I added this
+    public static final String SUBTRACT = "SUBTRACT"; // I added this
+
 
     /**
      * call getInput to get the file data into our buffer
+     *
      * @param fileName the file we open
      */
     public Lexer(String fileName) {
-
         getInput(fileName);
     }
 
     /**
      * Reads given file into the data member buffer
+     *
      * @param fileName name of file to parse
-    */
-    private void getInput(String fileName)  {
+     */
+    private void getInput(String fileName) {
         try {
             Path filePath = Paths.get(fileName);
             byte[] allBytes = Files.readAllBytes(filePath);
-            buffer = new String (allBytes);
+            buffer = new String(allBytes);
         } catch (IOException e) {
-            System.out.println ("You did not enter a valid file name in the run arguments.");
-            System.out.println ("Please enter a string to be parsed:");
+            System.out.println("You did not enter a valid file name in the run arguments.");
+            System.out.println("Please enter a string to be parsed:");
             Scanner scanner = new Scanner(System.in);
-            buffer=scanner.nextLine();
+            buffer = scanner.nextLine();
         }
+    }
+
+    /**
+     * Gets the next token in a file
+     * Should have no paramenters
+     */
+    public Token getNextToken() {
+        Token token=null;
+        while (index < buffer.length()) {
+            char ch = buffer.charAt(index);
+            if (Character.isLetter(ch)) {
+                token = new Token(IDTOKEN, getIdentifier(index));
+            } else if (Character.isDigit(ch)) {
+                token = new Token(INTTOKEN, getInteger(index));
+            } else if (ch == '+') {
+                // add
+            } else if (ch == '*') {
+                // multiply
+            } else if (ch == '-') {
+                // subtract
+            } else if (ch == '/') {
+                // divide
+            } else if (ch == ' ') {
+                // whitespace
+            } else {
+                //unknown
+            }
+        }
+        return token;
+    }
+
+    // need to get the value of the identifier
+    // startIndex is going to be i from getNextToken, that is sent as a parameter to getIdentifier
+    private String getIdentifier(int startIndex) {
+        String identifier = null;
+        while (index < buffer.length()) {
+            char ch = buffer.charAt(startIndex + 1);
+            if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
+                index++;
+                continue;
+            } else {
+                identifier = buffer.substring(startIndex, index);
+                break;
+            }
+        }
+        return identifier;
+        }
+
+
+    private String getInteger(int startIndex) {
+        String integer = null;
+        while (index < buffer.length()) {
+
+        }
+        return integer;
     }
 
     /**
      * Return all the token in the file
      * @return ArrayList of Token
      */
-    // So this is my algoirthm, I want it to check if it's a letter, then move to the next, if it's a letter or integer keep moving
-    public ArrayList<Token> getAllTokens(){
+    public ArrayList<Token> getAllTokens() {
         //TODO: place your code here for lexing file
+
         ArrayList<Token> tokens = new ArrayList<Token>();
+
         for (int i = 0; i < buffer.length(); i++) {
+
+            if (i == buffer.length() + 1) {
+                Token token = new Token(EOFTOKEN, "-");
+                tokens.add(token);
+                break;
+            }
+
             char ch1 = buffer.charAt(i);
+
             if (Character.isLetter(ch1)) {
                 int startIndex = i;
                 for (int j = startIndex + 1; j < (buffer.length() - (startIndex + 1)); j++) {
@@ -71,6 +140,7 @@ public class Lexer {
                         break;
                     }
                 }
+
             } else if (Character.isDigit(ch1)) {
                 int startIndex = i;
                 for (int k = startIndex + 1; k < buffer.length() - (startIndex + 1); k++) {
@@ -82,41 +152,20 @@ public class Lexer {
                         Token token = new Token(INTTOKEN, buffer.substring(startIndex, endIndex));
                         tokens.add(token);
                     }
-            }
-        }
+                }
 
-                    if (Character.isLetter(buffer.charAt(i)))
-
-
-
-
-
-                int endIndex;
-                // startIndex, endIndex ;
-                // stringCopied = buffer.substring(startIndex, endIndex)
-                // If it starts with a letter, I must take that letter and all the letters and digits that follow, until I hit an '=', '+', or '$'
-                // - its has type ID, then get it's value, and index = i after first token done
-            } else if (ch == '=') {
-                // If it's an equals, it must be made an assignment 'ASSMTTOKEN'
-            } else if (ch == '+') {
-                // If it's a plus it's a plus 'PLUSTOKEN'
+            } else if (ch1 == '=') {
+                Token token = new Token(ASSMTTOKEN, Character.toString(ch1));
+                tokens.add(token);
+            } else if (ch1 == '+') {
+                Token token = new Token(PLUSTOKEN, Character.toString(ch1));
+                tokens.add(token);
             } else {
-                // Then it's an unknown like '$'
+                Token token = new Token(UNKNOWN, Character.toString(ch1));
             }
         }
-        return tokens; // don't forget to change the return statement
+        return tokens;
     }
-/**
- * *ID:* starts with a letter followed by 0 or more letters and digits.
- *
- * *INT*: a sequence of digits
- *
- * *ASSMT*: a single ‘=’
- *
- * *PLUS*: a single ‘+’
- *
- * *UNKNOWN*: e.g., ‘$’
- */
 
 
 
@@ -141,7 +190,7 @@ public class Lexer {
         // just print out the text from the file
         System.out.println(lexer.buffer);
         // here is where you'll call getAllTokens
-
+        System.out.print(lexer.getAllTokens());
     }
 }
 
