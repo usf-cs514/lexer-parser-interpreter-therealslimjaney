@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -21,9 +22,9 @@ public class Lexer {
     public static final String PLUSTOKEN = "PLUS";
     public static final String UNKNOWN = "UNKNOWN"; // I added this
     public static final String EOFTOKEN = "EOF"; // I added this
-    public static final String MULTIPLY = "MULTIPLY"; // I added this
-    public static final String DIVIDE = "DIVIDE"; // I added this
-    public static final String SUBTRACT = "SUBTRACT"; // I added this
+    public static final String MULTOKEN = "MULT"; // I added this
+    public static final String DIVTOKEN = "DIV"; // I added this
+    public static final String SUBTOKEN = "SUB"; // I added this
 
 
     /**
@@ -32,6 +33,7 @@ public class Lexer {
      * @param fileName the file we open
      */
     public Lexer(String fileName) {
+
         getInput(fileName);
     }
 
@@ -55,144 +57,127 @@ public class Lexer {
 
     /**
      * Gets the next token in a file
-     * Should have no paramenters
+     * Should have no parameters
      */
     public Token getNextToken() {
-        Token token=null;
-        while (index < buffer.length()) {
-            char ch = buffer.charAt(index);
-            if (Character.isLetter(ch)) {
-                token = new Token(IDTOKEN, getIdentifier(index));
-            } else if (Character.isDigit(ch)) {
-                token = new Token(INTTOKEN, getInteger(index));
-            } else if (ch == '+') {
-                // add
-            } else if (ch == '*') {
-                // multiply
-            } else if (ch == '-') {
-                // subtract
-            } else if (ch == '/') {
-                // divide
-            } else if (ch == ' ') {
-                // whitespace
-            } else {
-                //unknown
-            }
-        }
-        return token;
-    }
-
-    // need to get the value of the identifier
-    // startIndex is going to be i from getNextToken, that is sent as a parameter to getIdentifier
-    private String getIdentifier(int startIndex) {
-        String identifier = null;
-        while (index < buffer.length()) {
-            char ch = buffer.charAt(startIndex + 1);
-            if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
-                index++;
-                continue;
-            } else {
-                identifier = buffer.substring(startIndex, index);
-                break;
-            }
-        }
-        return identifier;
-        }
-
-
-    private String getInteger(int startIndex) {
-        String integer = null;
-        while (index < buffer.length()) {
-
-        }
-        return integer;
-    }
-
-    /**
-     * Return all the token in the file
-     * @return ArrayList of Token
-     */
-    public ArrayList<Token> getAllTokens() {
-        //TODO: place your code here for lexing file
-
-        ArrayList<Token> tokens = new ArrayList<Token>();
-
-        for (int i = 0; i < buffer.length(); i++) {
-
-            if (i == buffer.length() + 1) {
-                Token token = new Token(EOFTOKEN, "-");
-                tokens.add(token);
-                break;
-            }
-
-            char ch1 = buffer.charAt(i);
-
-            if (Character.isLetter(ch1)) {
-                int startIndex = i;
-                for (int j = startIndex + 1; j < (buffer.length() - (startIndex + 1)); j++) {
-                    char ch2 = buffer.charAt(j);
-                    if (Character.isLetter(ch2) || Character.isDigit(ch2)) {
-                        continue;
-                    } else {
-                        int endIndex = j - 1;
-                        Token token = new Token(IDTOKEN, buffer.substring(startIndex, endIndex));
-                        tokens.add(token);
-                        break;
-                    }
-                }
-
-            } else if (Character.isDigit(ch1)) {
-                int startIndex = i;
-                for (int k = startIndex + 1; k < buffer.length() - (startIndex + 1); k++) {
-                    char ch3 = buffer.charAt(k);
-                    if (Character.isDigit(ch3)) {
-                        continue;
-                    } else {
-                        int endIndex = k - 1;
-                        Token token = new Token(INTTOKEN, buffer.substring(startIndex, endIndex));
-                        tokens.add(token);
-                    }
-                }
-
-            } else if (ch1 == '=') {
-                Token token = new Token(ASSMTTOKEN, Character.toString(ch1));
-                tokens.add(token);
-            } else if (ch1 == '+') {
-                Token token = new Token(PLUSTOKEN, Character.toString(ch1));
-                tokens.add(token);
-            } else {
-                Token token = new Token(UNKNOWN, Character.toString(ch1));
-            }
-        }
-        return tokens;
-    }
-
-
-
-    /**
-     * Before your run this starter code
-     * Select Run | Edit Configurations from the main menu.
-     * In Program arguments add the name of file you want to test (e.g., test.txt)
-     * @param args args[0]
-     */
-    public static void main(String[] args) {
-        String fileName="";
-        if (args.length==0) {
-            System.out.println("You can test a different file by adding as an argument");
-            System.out.println("See comment above main");
-            System.out.println("For this run, test.txt used");
-            fileName="test.txt";
+        if (index == buffer.length()) {
+            return new Token(EOFTOKEN, "-");
         } else {
-
-            fileName=args[0];
+            while (index < buffer.length()) {
+                char ch = buffer.charAt(index);
+                if (Character.isLetter(ch)) {
+                    index++;
+                    return new Token(IDTOKEN, getIdentifier(index));
+                } else if (Character.isDigit(ch)) {
+                    index++;
+                    return new Token(INTTOKEN, getInteger(index));
+                } else if (ch == '=') {
+                    index++;
+                    return new Token(ASSMTTOKEN, "=");
+                } else if (ch == '+') {
+                    index++;
+                    return new Token(PLUSTOKEN, "+");
+                } else if (ch == '*') {
+                    index++;
+                    return new Token(MULTOKEN, "*");
+                } else if (ch == '-') {
+                    index++;
+                    return new Token(SUBTOKEN, "-");
+                } else if (ch == '/') {
+                    index++;
+                    return new Token(DIVTOKEN, "/");
+                } else if (ch == ' ') {
+                    index++;
+                } else {
+                    index++;
+                    return new Token(UNKNOWN, Character.toString(ch));
+                }
+            }
         }
-        Lexer lexer = new Lexer(fileName);
-        // just print out the text from the file
-        System.out.println(lexer.buffer);
-        // here is where you'll call getAllTokens
-        System.out.print(lexer.getAllTokens());
+        return new Token(EOFTOKEN, "-");
     }
-}
+
+
+        // need to get the value of the identifier
+        // startIndex is going to be i from getNextToken, that is sent as a parameter to getIdentifier
+        private String getIdentifier(int startIndex) {
+            while (index <= buffer.length()){
+                if (index == buffer.length()) {
+                    return "-";
+                } else {
+                    char ch = buffer.charAt(index);
+                    if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
+                        index++;
+                    } else {
+                        return buffer.substring(startIndex - 1, index);
+
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        private String getInteger(int startIndex) {
+            while (index <= buffer.length()) {
+                if (index == buffer.length()) {
+                    return "-";
+                } else {
+                    char ch = buffer.charAt(index);
+                    if (Character.isDigit(ch)) {
+                        index++;
+                    } else {
+                        return buffer.substring(startIndex - 1, index);
+                    }
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Return all the token in the file
+         * @return ArrayList of Token
+         */
+        public ArrayList<Token> getAllTokens() {
+            //TODO: place your code here for lexing file
+            ArrayList<Token> tokens = new ArrayList<Token>();
+            while (true) {
+                Token nextToken = getNextToken();
+                tokens.add(nextToken);
+                if ("EOF".equals(nextToken.type)) {
+                    break;
+                }
+            }
+            return tokens;
+        }
+
+
+        /**
+         * Before your run this starter code
+         * Select Run | Edit Configurations from the main menu.
+         * In Program arguments add the name of file you want to test (e.g., test.txt)
+         * @param args args[0]
+         */
+        public static void main (String[]args){
+            String fileName = "";
+            if (args.length == 0) {
+                System.out.println("You can test a different file by adding as an argument");
+                System.out.println("See comment above main");
+                System.out.println("For this run, test.txt used");
+                fileName = "test.txt";
+            } else {
+
+                fileName = args[0];
+            }
+            Lexer lexer = new Lexer(fileName);
+            // just print out the text from the file
+            System.out.println(lexer.buffer);
+            // here is where you'll call getAllTokens
+            System.out.print(lexer.getAllTokens());
+        }
+
+    }
+
 
 /**- Lexer should have a getNextToken method with no params that returns a single token
  - Lexer should have private methods for getIdentifier and getInteger, called by getNextToken,
