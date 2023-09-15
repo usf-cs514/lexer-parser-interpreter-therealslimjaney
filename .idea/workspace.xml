@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Changed strategy to a while loop approach">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" afterDir="false" />
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files.">
       <change beforePath="$PROJECT_DIR$/src/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,13 +84,22 @@
       <option name="project" value="LOCAL" />
       <updated>1694738367388</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files.">
+      <option name="closed" value="true" />
+      <created>1694820665335</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1694820665335</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Rough beginnings" />
     <MESSAGE value="Changed strategy to a while loop approach" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed strategy to a while loop approach" />
+    <MESSAGE value="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files." />
+    <option name="LAST_COMMIT_MESSAGE" value="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

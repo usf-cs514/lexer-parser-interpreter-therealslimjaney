@@ -103,7 +103,7 @@ public class Lexer {
         private String getIdentifier(int startIndex) {
             while (index <= buffer.length()){
                 if (index == buffer.length()) {
-                    return "-";
+                    return buffer.substring(startIndex - 1, index);
                 } else {
                     char ch = buffer.charAt(index);
                     if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
@@ -121,7 +121,7 @@ public class Lexer {
         private String getInteger(int startIndex) {
             while (index <= buffer.length()) {
                 if (index == buffer.length()) {
-                    return "-";
+                    return buffer.substring(startIndex - 1, index);
                 } else {
                     char ch = buffer.charAt(index);
                     if (Character.isDigit(ch)) {
