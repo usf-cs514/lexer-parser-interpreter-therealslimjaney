@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 // Parser: Determines if a statement or statements is valid based on the expected structure of those statements, and displays an error if not.
 
@@ -11,8 +13,10 @@ import java.util.ArrayList;
 // Use a recursive descent parsing scheme: define a ParseX method for each particular “part of speech”.
 // For example, parseAssignOp will be called when you are expecting a token of type “AssignOp”.
 public class Parser {
-    ArrayList<Token> tokenList;
+    ArrayList<Token> tokenList; //data member for token list (required)
+    HashMap<String, Integer> table = new HashMap<String, Integer>(); //data member for IdTable (required)
     int listIndex=0;
+    int line = 0; // This is where the error is
 
     //TODO implement Parser class here
     public Parser(){
@@ -20,11 +24,6 @@ public class Parser {
         Lexer lexer = new Lexer(fileName);
         ArrayList<Token> tokenList = lexer.getAllTokens();
     }
-
-    // Jane! Note, there are assignment statements
-    // assignment statement has structure: LHS=RHS
-    // Assignment operators:
-    // Expression: RHS
 
 
     private void parseProgram() {
@@ -39,11 +38,21 @@ public class Parser {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
         if (parseId()) {
+            IdTable.add((tokenList.get(listIndex)).type, table);
             if (parseAssignOp()) {
                 if (parseExpression()) {
                     return true;
+                } else {
+                    System.out.println("Expecting");
+                    //error: expecting identifier or integer
                 }
+            } else {
+                //error: expecting assignment operator
+                System.out.println("Expecting assignment operator on line: " + line);
             }
+        } else {
+            System.out.println("Expecting identifier on line: " + line);
+            //error: expecting identifier
         }
         return false;
     }
@@ -53,32 +62,35 @@ public class Parser {
         if (nextToken().type == "ID") {
             return true;
         } else {
-            System.out.println("Expecting identifier");
+            return false;
         }
-        return false;
     }
 
     //this method parses a single assignment operator
-    private Boolean parseAssignOp() {
-            if (nextToken().type == "ASSMT") {
-                return true;
-            } else {
-                System.out.println("Expecting assignment operator");
-            }
+    private boolean parseAssignOp() {
+        if (nextToken().type == "ASSMT") {
+            return true;
+        } else {
             return false;
         }
+    }
 
-
+    //An undefined identifier can't be in an expression, so when I reach one, I have finished parsing the expression
+    //Now it is up to parseID to either store the new ID in table. If an assignment operator doesnt follow it, we in trouble?
     private boolean parseExpression() {
         Token tokenToScrutinize = nextToken();
         if (tokenToScrutinize.type == "INT") {
             parseExpression();
-        } else if (tokenToScrutinize.type == "PLUS"){
+        } else if (tokenToScrutinize.type == "PLUS") {
             parseExpression();
+        } else if (IdTable.getAddress(tokenToScrutinize.type, table) != -1) {  // is this method gotta be made public?
+            parseExpression();
+        } else {
+            return false;
         }
-            if (IdTable.getAddress())
-            //have got to look up wh
-        }
+        return false;
+    }
+
         // this method parses an (arithmetic)expression, i.e., the right-hand-side of an assignment
         // Note that (arithmetic)expressions can include an unlimited number of “+” signs, e.g., “Y+3+4”
         // Syntax for <arithmetic-expr>: <term> | <arithmetic-expr> + <term>
