@@ -98,8 +98,6 @@ public class Lexer {
     }
 
 
-        // need to get the value of the identifier
-        // startIndex is going to be i from getNextToken, that is sent as a parameter to getIdentifier
         private String getIdentifier(int startIndex) {
             while (index <= buffer.length()){
                 if (index == buffer.length()) {
