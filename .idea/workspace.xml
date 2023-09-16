@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Initial parser commit">
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Second parser commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IdTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IdTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -160,7 +158,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694828503110</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Second parser commit">
+      <option name="closed" value="true" />
+      <created>1694830514106</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1694830514106</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -171,7 +177,8 @@
     <MESSAGE value="I added to getNextToken, to skip new line characters along with whitespace" />
     <MESSAGE value="I added to getNextToken, to skip tabs" />
     <MESSAGE value="Initial parser commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial parser commit" />
+    <MESSAGE value="Second parser commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second parser commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
