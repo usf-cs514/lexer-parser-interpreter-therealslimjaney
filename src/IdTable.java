@@ -18,7 +18,7 @@ public class IdTable {
 
     public static void add(String value, HashMap<String, Integer> t) {
         //this method adds an entry to the map, you need only send the id.
-        t.put(value, address);
+        t.putIfAbsent(value, address);
         address++;
     }
 

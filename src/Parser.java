@@ -17,6 +17,7 @@ public class Parser {
     HashMap<String, Integer> table = new HashMap<String, Integer>(); //data member for IdTable (required)
     int listIndex=0;
     int line = 0; // This is where the error is
+    String message = "";
 
     //TODO implement Parser class here
     public Parser(){
@@ -29,32 +30,29 @@ public class Parser {
     private void parseProgram() {
         //this method drives the process and parses an entire program.
         // This method should call parseAssignment within a loop.
-        while (true) {
+        while (listIndex < tokenList.size()) {
             parseAssignment();
         }
     }
 
-    private boolean parseAssignment() {
+    private void parseAssignment() {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
         if (parseId()) {
             IdTable.add((tokenList.get(listIndex)).type, table);
             if (parseAssignOp()) {
                 if (parseExpression()) {
-                    return true;
                 } else {
-                    System.out.println("Expecting");
-                    //error: expecting identifier or integer
+                    reportError("Expecting identifier or integer"); // must remove this. Im handling these errors in the method
                 }
             } else {
                 //error: expecting assignment operator
-                System.out.println("Expecting assignment operator on line: " + line);
+                reportError("Expecting assignment operator");
             }
         } else {
-            System.out.println("Expecting identifier on line: " + line);
+            reportError("Expecting identifier");
             //error: expecting identifier
         }
-        return false;
     }
 
     // This method parses a single identifier
@@ -69,43 +67,37 @@ public class Parser {
     //this method parses a single assignment operator
     private boolean parseAssignOp() {
         if (nextToken().type == "ASSMT") {
+                return true;
+            } else {
+                return false;
+        }
+    }
+
+    // This method checks if it is an ID or INT. it must be this if it follows a + or follows a =
+    private boolean parseTerm() {
+        Token t = nextToken();
+        if (t.type=="EOF" || t.type=="UNKNOWN") {
+            reportError("Expecting identifier or integer");
+        } else if ((t.type == "ID" && (IdTable.getAddress(t.type, table) != -1) || t.type == "INT") {
             return true;
-        } else {
-            return false;
         }
+
     }
 
-    //An undefined identifier can't be in an expression, so when I reach one, I have finished parsing the expression
-    //Now it is up to parseID to either store the new ID in table. If an assignment operator doesnt follow it, we in trouble?
     private boolean parseExpression() {
-        Token tokenToScrutinize = nextToken();
-        if (tokenToScrutinize.type == "INT") {
-            parseExpression();
-        } else if (tokenToScrutinize.type == "PLUS") {
-            parseExpression();
-        } else if (IdTable.getAddress(tokenToScrutinize.type, table) != -1) {  // is this method gotta be made public?
-            parseExpression();
-        } else {
-            return false;
+        while (true) {
+            if (parseTerm()) {
+                // if it is an ID or INT, it must be followed by an ID(new statement) or + (continuation of expression)
+            } else
+            if (t.type == "PLUS") {
+                parseTerm();
+            } else if (IdTable.getAddress(t.type, table) == -1) {
+                listIndex--; //deincrement the listIndex because I want the parseAssignment method to start running from the ID I just found that isnt in the Id table
+            }
         }
-        return false;
     }
 
-        // this method parses an (arithmetic)expression, i.e., the right-hand-side of an assignment
-        // Note that (arithmetic)expressions can include an unlimited number of “+” signs, e.g., “Y+3+4”
-        // Syntax for <arithmetic-expr>: <term> | <arithmetic-expr> + <term>
-        // Syntax for term: <term>: <identifier> | <integer>
-        // JANE: So basically when we check if it is a valid expression, we need to do the following:
-        //  - look for term (identifier or integer or PLUS+)
-        //      - if PLUS+, move to next token (we are still in the arithmetic expression)
-        //      - if integer, move to next token (we are still in the arithmetic expression)
-        //      -if identifier, check the ID table to see if it is defined.
-        //          -if defined, move to next token (we are still in the arithmetic expression)
-        //          if not defined,
-        //              -we must have reached a new assignment statement
-        // Now note, we can't declare a new ID and then set it equal to an undefined ID. That must throw an error somewhere.
 
-    }
 
     //this method gets the next token in the list and increments the index.
     private Token nextToken() {
@@ -113,10 +105,16 @@ public class Parser {
         return tokenList.get(listIndex);
     }
 
-    private String toString() {
-
-    }
-    public static void main (String[]args) {
+    // private String toString() {
+     // }
+        //
+        public void reportError(String message) {
+            System.out.println(message + " on line " + (index + 1));
+            System.exit(1);
+        }
+        public static void main (String[]args) {
+        Parser parser = new Parser();
+        parser.parseProgram();
         // Create a lexer and call getAllTokens, then loop through those tokens
         // Define a parseX method for each "part of speech"
             // Eg, a parseAssignOp will be called when you are expecting a token type of AssignOp
