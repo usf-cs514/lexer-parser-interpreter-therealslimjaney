@@ -35,9 +35,17 @@ public class Parser {
         }
     }
 
-    private void parseAssignment() {
+    private boolean parseAssignment() {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
+        if (parseId()) {
+            if (parseAssignOp()) {
+                if (parseExpression()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // This method parses a single identifier
@@ -51,7 +59,7 @@ public class Parser {
     }
 
     //this method parses a single assignment operator
-    private void parseAssignOp() {
+    private Boolean parseAssignOp() {
             if (nextToken().type == "ASSMT") {
                 return true;
             } else {
@@ -59,11 +67,32 @@ public class Parser {
             }
             return false;
         }
-    }
 
-    private void parseExpression() {
-        // this method parses an expression, i.e., the right-hand-side of an assignment
-        // Note that expressions can include an unlimited number of “+” signs, e.g., “Y+3+4”
+
+    private boolean parseExpression() {
+        Token tokenToScrutinize = nextToken();
+        if (tokenToScrutinize.type == "INT") {
+            parseExpression();
+        } else if (tokenToScrutinize.type == "PLUS"){
+            parseExpression();
+        }
+            if (IdTable.getAddress())
+            //have got to look up wh
+        }
+        // this method parses an (arithmetic)expression, i.e., the right-hand-side of an assignment
+        // Note that (arithmetic)expressions can include an unlimited number of “+” signs, e.g., “Y+3+4”
+        // Syntax for <arithmetic-expr>: <term> | <arithmetic-expr> + <term>
+        // Syntax for term: <term>: <identifier> | <integer>
+        // JANE: So basically when we check if it is a valid expression, we need to do the following:
+        //  - look for term (identifier or integer or PLUS+)
+        //      - if PLUS+, move to next token (we are still in the arithmetic expression)
+        //      - if integer, move to next token (we are still in the arithmetic expression)
+        //      -if identifier, check the ID table to see if it is defined.
+        //          -if defined, move to next token (we are still in the arithmetic expression)
+        //          if not defined,
+        //              -we must have reached a new assignment statement
+        // Now note, we can't declare a new ID and then set it equal to an undefined ID. That must throw an error somewhere.
+
     }
 
     //this method gets the next token in the list and increments the index.
