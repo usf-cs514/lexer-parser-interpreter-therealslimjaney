@@ -4,14 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="I added to getNextToken, to skip new line characters along with whitespace">
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Initial parser commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IdTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IdTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,7 +51,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.LexerTest">
     <configuration name="Lexer" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Lexer" />
       <module name="LexerParserStarter" />
@@ -51,6 +60,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="LexerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="LexerParserStarter" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="LexerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Lexer" />
+      <item itemvalue="JUnit.LexerTest" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.LexerTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -117,7 +144,23 @@
       <option name="project" value="LOCAL" />
       <updated>1694824850623</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="I added to getNextToken, to skip tabs">
+      <option name="closed" value="true" />
+      <created>1694825341331</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1694825341331</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Initial parser commit">
+      <option name="closed" value="true" />
+      <created>1694828503110</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1694828503110</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -126,7 +169,9 @@
     <MESSAGE value="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files." />
     <MESSAGE value="Working on test.txt" />
     <MESSAGE value="I added to getNextToken, to skip new line characters along with whitespace" />
-    <option name="LAST_COMMIT_MESSAGE" value="I added to getNextToken, to skip new line characters along with whitespace" />
+    <MESSAGE value="I added to getNextToken, to skip tabs" />
+    <MESSAGE value="Initial parser commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial parser commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

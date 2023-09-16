@@ -167,11 +167,15 @@ public class Lexer {
 
                 fileName = args[0];
             }
+
+            /**
             Lexer lexer = new Lexer(fileName);
             // just print out the text from the file
             System.out.println(lexer.buffer);
             // here is where you'll call getAllTokens
             System.out.print(lexer.getAllTokens());
+            */
+
         }
 
     }
