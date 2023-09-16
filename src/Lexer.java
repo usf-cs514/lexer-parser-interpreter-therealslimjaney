@@ -86,7 +86,7 @@ public class Lexer {
                 } else if (ch == '/') {
                     index++;
                     return new Token(DIVTOKEN, "/");
-                } else if (ch == ' ') {
+                } else if (ch == ' ' || ch == '\n' || ch == '\r') {
                     index++;
                 } else {
                     index++;
