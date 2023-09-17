@@ -20,9 +20,8 @@ public class Parser {
 
     //TODO implement Parser class here
     public Parser(){
-        String fileName = "";
-        Lexer lexer = new Lexer(fileName);
-        tList = lexer.getAllTokens();;
+        Lexer lexer = new Lexer("test.txt");
+        tList = lexer.getAllTokens();
     }
 
 
@@ -38,17 +37,22 @@ public class Parser {
     private void parseAssignment() {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
-        if (parseId()) {
-            IdTable.add((tList.get(listIndex)).type, table);
-            if (parseAssignOp()) {
-                parseExpression();
-            } else {
-                //error: expecting assignment operator
-                reportError("Expecting assignment operator");
+        while (true) {
+            if ("EOF".equals((tList.get(listIndex)).type)) {
+                break;
             }
-        } else {
-            reportError("Expecting identifier");
-            //error: expecting identifier
+            if (parseId()) {
+                IdTable.add((tList.get(listIndex)).type, table);
+                if (parseAssignOp()) {
+                    parseExpression();
+                } else {
+                    //error: expecting assignment operator
+                    reportError("Expecting assignment operator");
+                }
+            } else {
+                reportError("Expecting identifier");
+                //error: expecting identifier
+            }
         }
     }
 
