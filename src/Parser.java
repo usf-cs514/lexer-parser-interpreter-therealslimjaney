@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Objects;
 // I need to figure out why parseID is failing. I think I may be using the wrong equals method. I need to do the equals worksheets and the chapter readings.
 // Also look on uDemy tomorrow for equals stuff.
 // Keep persevering!
@@ -15,15 +16,17 @@ import java.util.HashMap;
 // Use a recursive descent parsing scheme: define a ParseX method for each particular “part of speech”.
 // For example, parseAssignOp will be called when you are expecting a token of type “AssignOp”.
 public class Parser {
-    HashMap<String, Integer> table = new HashMap<String, Integer>(); //data member for IdTable (required)
+     //data member for IdTable (required)
     int listIndex=0;
-    ArrayList<Token> tList;
+    ArrayList<Token> tList; //Data member for token list is required by spec
+    IdTable tableObj; //Also required by spec
     int line = 0; // This is where the error is
 
     //TODO implement Parser class here
     public Parser(){
         Lexer lexer = new Lexer("test.txt");
         tList = lexer.getAllTokens();
+        tableObj = new IdTable();
     }
 
 
@@ -31,7 +34,9 @@ public class Parser {
         //this method drives the process and parses an entire program.
         // This method should call parseAssignment within a loop.
         while (listIndex < tList.size()) {
-            if (!"EOF".equals((tList.get(listIndex)).type)) {
+            Token token = tList.get(listIndex);
+            String tokenType = token.type;
+            if (!"EOF".equals(tokenType)) {
                 parseAssignment();
             } else {
                 System.out.println("Valid Program");
@@ -43,8 +48,9 @@ public class Parser {
     private void parseAssignment() {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
+        int counter = 0;
             if (parseId()) {
-                IdTable.add((tList.get(listIndex)).type, table);
+                tableObj.add((tList.get(listIndex)).type); //This is the problem. the listIndex has been incremented, you are adding the next token, not the ID
                 if (parseAssignOp()) {
                     parseExpression();
                 } else {
@@ -60,57 +66,52 @@ public class Parser {
 
     // This method parses a single identifier
     private boolean parseId() {
-        if ("ID".equals(nextToken().type)) {
-            return true;
-        } else {
-            return false;
-        }
+        String tokenType = nextToken().type;
+        return tokenType.equals("ID");
     }
 
     //this method parses a single assignment operator
     private boolean parseAssignOp() {
-        if ("ASSMT".equals(nextToken().type)) {
-                return true;
-            } else {
-                return false;
-        }
+        String tokenType = nextToken().type;
+        return "ASSMT".equals(tokenType);
     }
 
     // This method checks if it is an ID or INT. it must be this if it follows a + or follows a =
     private boolean parseIdOrInt(Token t) {
-        if ("ID".equals(t.type)) {
-            return true;
-        } else if ("INT".equals(t.type)) {
+        String tokenType = nextToken().type;
+        if ("ID".equals(tokenType) || "INT".equals(tokenType)) {
             return true;
         }
         return false;
     }
 
-            private void parseExpression() {
-                Token t1 = nextToken();
-                if (parseIdOrInt(t1)) {
-                    if ("ID".equals(t1.type)) {
-                        if (IdTable.getAddress(t1.type, table) == -1) {
-                            reportError("Identifier not defined");
-                        }
-                    }
-                } else {
-                    reportError("Expecting identifier or integer");
-                }
-                Token t2 = nextToken();
-                if ("PLUS".equals(t2.type)) {
-                    parseExpression();
-                    ;
-                } else if ("ID".equals(t2.type)) {
-                    listIndex--;
-                    parseAssignment();
+    private void parseExpression() {
+        Token t1 = nextToken();
+        String tokenType = t1.type;
+        if (parseIdOrInt(t1)) {
+            if ("ID".equals(tokenType)) {
+                if (tableObj.getAddress(tokenType) == -1) {
+                    reportError("Identifier not defined");
                 }
             }
+        } else {
+            reportError("Expecting identifier or integer");
+        }
+        Token t2 = nextToken();
+        String tokenType2 = t2.type;
+        if ("PLUS".equals(tokenType2)) {
+            parseExpression();
+        } else if ("ID".equals(tokenType2)) {
+            listIndex--;
+            parseAssignment();
+        }
+    }
 
         //this method gets the next token in the list and increments the index.
-        private Token nextToken () {
+        private Token nextToken() {
+            Token token = tList.get(listIndex);
             listIndex++;
-            return tList.get(listIndex);
+            return token;
         }
 
         // private String toString() {

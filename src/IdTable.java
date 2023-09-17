@@ -7,29 +7,35 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class IdTable {
-    public static int address = 0;
+    HashMap<String, Integer> idTable;
+    int addressCounter;
     //a hashmap data member with String key and Integer value
     /**The keys are the identifiers and the values represent the address in
     memory in which the identifier will be stored (if an interpreter were built)
      You can also just think of it as the order the ids appear- the first id will
      have address 0, the second id will have address 1, and so on.*/
     public IdTable() {
+        idTable = new HashMap<>();
+        addressCounter=-1;
     }
 
-    public static void add(String value, HashMap<String, Integer> t) {
-        //this method adds an entry to the map, you need only send the id.
-        t.putIfAbsent(value, address);
-        address++;
+    public void add(String id) {
+        idTable.putIfAbsent(id, addressCounter++);
     }
 
-    public static int getAddress(String value, HashMap<String, Integer> tab) {
+    public int getAddress(String id) {
         // this method returns the address associated with an id, or -1 if not found.
-        return tab.get(value);
+        int address = idTable.get(id);
+        return address;
     }
 
+    @Override
+    public String toString() {
+        return idTable.toString();
+    }
+}
     /**
     private String toString() {
         return table;
     }
      */
-}
