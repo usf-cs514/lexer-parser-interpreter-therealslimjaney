@@ -2,9 +2,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
-// I need to figure out why parseID is failing. I think I may be using the wrong equals method. I need to do the equals worksheets and the chapter readings.
-// Also look on uDemy tomorrow for equals stuff.
-// Keep persevering!
 // Parser: Determines if a statement or statements is valid based on the expected structure of those statements, and displays an error if not.
 
 /** BNF
@@ -38,19 +35,16 @@ public class Parser {
             String tokenType = token.type;
             if (!"EOF".equals(tokenType)) {
                 parseAssignment();
-            } else {
-                System.out.println("Valid Program");
             }
         }
+        System.out.println("Valid Program");
     }
-
 
     private void parseAssignment() {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
-        int counter = 0;
             if (parseId()) {
-                tableObj.add((tList.get(listIndex-1)).type); //This is the problem. the listIndex has been incremented, you are adding the next token, not the ID
+                tableObj.add((tList.get(listIndex-1)).value); //This is the problem. the listIndex has been incremented, you are adding the next token, not the ID
                 if (parseAssignOp()) {
                     parseExpression();
                 } else {
@@ -77,7 +71,7 @@ public class Parser {
     }
 
     // This method checks if it is an ID or INT. it must be this if it follows a + or follows a =
-    private boolean parseIdOrInt(Token t) {
+    private boolean parseIdOrInt() {
         String tokenType = nextToken().type;
         if ("ID".equals(tokenType) || "INT".equals(tokenType)) {
             return true;
@@ -86,11 +80,11 @@ public class Parser {
     }
 
     private void parseExpression() {
-        Token t1 = nextToken();
-        String tokenType = t1.type;
-        if (parseIdOrInt(t1)) {
+        if (parseIdOrInt()) {
+            String tokenType = tList.get(listIndex-1).type; // have to deincrement listIndex
+            String tokenValue = tList.get(listIndex-1).value; //
             if ("ID".equals(tokenType)) {
-                if (tableObj.getAddress(tokenType) == -1) {
+                if (tableObj.getAddress(tokenValue) == -1) {
                     reportError("Identifier not defined");
                 }
             }

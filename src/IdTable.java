@@ -19,13 +19,13 @@ public class IdTable {
         addressCounter=-1;
     }
 
-    public void add(String id) {
-        idTable.putIfAbsent(id, addressCounter++);
+    public void add(String value) {
+        idTable.putIfAbsent(value, addressCounter+1);
     }
 
-    public int getAddress(String id) {
+    public int getAddress(String value) {
         // this method returns the address associated with an id, or -1 if not found.
-        int address = idTable.get(id);
+        int address = idTable.get(value);
         return address;
     }
 
