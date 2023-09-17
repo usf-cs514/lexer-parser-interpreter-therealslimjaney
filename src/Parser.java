@@ -50,7 +50,7 @@ public class Parser {
         // it should call parseId, parseAssignmentOp, and parseExpression.
         int counter = 0;
             if (parseId()) {
-                tableObj.add((tList.get(listIndex)).type); //This is the problem. the listIndex has been incremented, you are adding the next token, not the ID
+                tableObj.add((tList.get(listIndex-1)).type); //This is the problem. the listIndex has been incremented, you are adding the next token, not the ID
                 if (parseAssignOp()) {
                     parseExpression();
                 } else {
