@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-
+// I need to figure out why parseID is failing. I think I may be using the wrong equals method. I need to do the equals worksheets and the chapter readings.
+// Also look on uDemy tomorrow for equals stuff.
+// Keep persevering!
 // Parser: Determines if a statement or statements is valid based on the expected structure of those statements, and displays an error if not.
 
 /** BNF
@@ -29,18 +31,18 @@ public class Parser {
         //this method drives the process and parses an entire program.
         // This method should call parseAssignment within a loop.
         while (listIndex < tList.size()) {
-            parseAssignment();
-            System.out.println("Valid program");
+            if (!"EOF".equals((tList.get(listIndex)).type)) {
+                parseAssignment();
+            } else {
+                System.out.println("Valid Program");
+            }
         }
     }
+
 
     private void parseAssignment() {
         // this method should parse a single assignment statement (LHS=RHS)
         // it should call parseId, parseAssignmentOp, and parseExpression.
-        while (true) {
-            if ("EOF".equals((tList.get(listIndex)).type)) {
-                break;
-            }
             if (parseId()) {
                 IdTable.add((tList.get(listIndex)).type, table);
                 if (parseAssignOp()) {
@@ -54,7 +56,7 @@ public class Parser {
                 //error: expecting identifier
             }
         }
-    }
+
 
     // This method parses a single identifier
     private boolean parseId() {

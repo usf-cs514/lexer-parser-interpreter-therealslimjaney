@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="8th parser commit">
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="9th parser commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Parser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
     </list>
@@ -218,7 +217,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694909492389</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="9th parser commit">
+      <option name="closed" value="true" />
+      <created>1694910527734</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1694910527734</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -236,7 +243,8 @@
     <MESSAGE value="6th parser commit" />
     <MESSAGE value="7th parser commit" />
     <MESSAGE value="8th parser commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="8th parser commit" />
+    <MESSAGE value="9th parser commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="9th parser commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
