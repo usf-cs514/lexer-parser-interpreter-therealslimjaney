@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="6th parser commit">
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="7th parser commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/IdTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IdTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
@@ -50,11 +50,18 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.LexerTest">
+  <component name="RunManager" selected="Application.Parser">
     <configuration name="Lexer" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Lexer" />
       <module name="LexerParserStarter" />
       <option name="PROGRAM_PARAMETERS" value="testWhiteSpace.txt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Parser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Parser" />
+      <module name="LexerParserStarter" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -70,10 +77,12 @@
     </configuration>
     <list>
       <item itemvalue="Application.Lexer" />
+      <item itemvalue="Application.Parser" />
       <item itemvalue="JUnit.LexerTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Parser" />
         <item itemvalue="JUnit.LexerTest" />
       </list>
     </recent_temporary>
@@ -191,7 +200,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694890192893</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="7th parser commit">
+      <option name="closed" value="true" />
+      <created>1694903473147</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1694903473147</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -207,7 +224,8 @@
     <MESSAGE value="Fourth parser commit" />
     <MESSAGE value="Fifth parser commit" />
     <MESSAGE value="6th parser commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="6th parser commit" />
+    <MESSAGE value="7th parser commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="7th parser commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -22,9 +22,9 @@ public class IdTable {
         address++;
     }
 
-    public static int getAddress(String value, HashMap<String, Integer> t) {
+    public static int getAddress(String value, HashMap<String, Integer> tab) {
         // this method returns the address associated with an id, or -1 if not found.
-        return t.get(value);
+        return tab.get(value);
     }
 
     /**
