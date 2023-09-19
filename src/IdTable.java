@@ -9,8 +9,8 @@ import java.util.HashMap;
 
 public class IdTable {
 
-    HashMap<String, Integer> idTable;
-    int addressCounter;
+    HashMap<String, Integer> idTable; // need to figure out how to make private
+    private int addressCounter;
 
     /**
      * Creates a new instance of IdTable class
@@ -19,7 +19,7 @@ public class IdTable {
 
     public IdTable() {
         idTable = new HashMap<>();
-        addressCounter = 0; // Set to -1 so that ...
+        addressCounter = 0;
     }
 
     /**

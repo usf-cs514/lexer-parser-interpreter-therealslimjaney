@@ -15,9 +15,9 @@ import java.util.Scanner;
  */
 public class Lexer {
 
-    String buffer;
+    private String buffer;
 
-    int lexerIndex = 0;
+    private int lexerIndex = 0;
 
     public static final String INTTOKEN = "INT";
     public static final String IDTOKEN = "ID";

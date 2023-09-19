@@ -7,16 +7,22 @@ import java.util.ArrayList;
  */
 
 public class Parser {
+    // I am making a 2D array list to store my complete statements
+    // The statements will take the form <ID> = <Expression>
+    ArrayList<ArrayList<Token>> validAssignments = new ArrayList<>();
+   // Create start and end index variables of valid assignment statements in token list
+    int startIndex =0;
+    int endIndex =0;
 
-    IdTable parsIdTable;
-    ArrayList<Token> parsTokenList; // Data member for token list is required by spec
-    int parsIndex = 0;
+    IdTable parsIdTable; // need to figure out how to make this private
+    private ArrayList<Token> parsTokenList; // Data member for token list is required by spec
+    private int parsIndex = 0;
     /**
      * Creates an instance of the Parser class
      */
     public Parser() {
         parsIdTable = new IdTable();
-        Lexer parsLexer = new Lexer("testWhitespace.txt");
+        Lexer parsLexer = new Lexer("testMultiplePlus.txt");
         parsTokenList = parsLexer.getAllTokens();
     }
 
@@ -45,6 +51,7 @@ public class Parser {
         if (parseId()) {
             // parseId has called nextToken which incremented the parsIndex, to ensure the correct token is checked and added to idTable, use index (parsIndex-1)
             parsIdTable.add(parsTokenList.get(parsIndex-1));
+            startIndex = parsIndex-1;
             if (parseAssignOp()) {
                 parseExpression();
             } else {
@@ -122,11 +129,17 @@ public class Parser {
         // The expression will continue being parsed if a plus operator follows, otherwise it signals the start of a new assignment statement
         // Check what kind the next token is before calling nextToken and incrementing index
         Token tokenN = parsTokenList.get(parsIndex);
-        //Check if EOF
-        checkEof(tokenN);
+
+        if (checkEof(tokenN)) {
+            endIndex = parsIndex;
+            storeAssignment(startIndex, endIndex);
+            validProgram();
+        }
         if (parseIdOrOp(tokenN)) {
             // If Id, call parse assignment (a new assignment statement)
             if ("ID".equals(tokenN.type)) {
+                endIndex = parsIndex;
+                storeAssignment(startIndex, endIndex);
                 parseAssignment();
             } else {
                 nextToken(); // No need to catch this because we know it is an AssignOp
@@ -163,13 +176,29 @@ public class Parser {
      * If the end of file has been reached, the program has thrown no errors, and it is a valid program
      * @param token token to be evaluated
      */
-    private void checkEof(Token token) {
-        if ("EOF".equals(token.type)) {
-            System.out.println("Valid Program");
-            System.exit(1);
-        }
+    private boolean checkEof(Token token) {
+        return ("EOF".equals(token.type));
     }
 
+    /**
+     * This method captures a valid assignment statement and stores it in an ArrayList
+     * The assignment is added to the 2D ArrayList of valid assignments
+     * @param startIndex
+     * @param endIndex
+     */
+    private void storeAssignment(int startIndex, int endIndex) {
+        ArrayList<Token> assignment = new ArrayList<>();
+        for (int i = startIndex; i < endIndex; i++) { // end index is exclusive
+            assignment.add(parsTokenList.get(i));
+        }
+        validAssignments.add(assignment);
+    }
+
+    private void validProgram() {
+        System.out.println(validAssignments);
+        System.out.println("Valid Program");
+        System.exit(1);
+    }
     /**
      * Calls the parser constructor and parses program
      * @param args
