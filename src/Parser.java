@@ -16,7 +16,7 @@ public class Parser {
      */
     public Parser() {
         parsIdTable = new IdTable();
-        Lexer parsLexer = new Lexer("testMultiplePlus.txt");
+        Lexer parsLexer = new Lexer("testWhitespace.txt");
         parsTokenList = parsLexer.getAllTokens();
     }
 
@@ -48,10 +48,10 @@ public class Parser {
             if (parseAssignOp()) {
                 parseExpression();
             } else {
-                reportError("Expecting assignment operator");
+                reportError("Error: Expecting assignment operator, line 1.");
             }
         } else {
-            reportError("Expecting identifier");
+            reportError("Error: Expecting identifier, line 1.");
         }
     }
 
@@ -86,6 +86,11 @@ public class Parser {
         return false;
     }
 
+    /**
+     * Determines if a token is an ID or a '+' Op
+     * @param token token to be evaluated
+     * @return boolean true or false
+     */
     private boolean parseIdOrOp(Token token) {
         String tokenType = token.type;
         if ("ID".equals(tokenType) || "PLUS".equals(tokenType)) {
@@ -95,6 +100,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the expression on the right hand side of an assignment statement
+     */
     private void parseExpression() {
 
         // Checks that first term is an id or int
@@ -104,11 +112,11 @@ public class Parser {
             if ("ID".equals(token.type)) {
                 // Check if the ID is defined in parsIdTable
                 if (!parsIdTable.idTable.containsKey(token.value)) {
-                    reportError("Identifier not defined");
+                    reportError("Error: Identifier not defined, line 1.");
                 }
             }
         } else {
-            reportError("Expecting identifier or integer");
+            reportError("Error: Expecting identifier or integer, line 1.");
         }
 
         // The expression will continue being parsed if a plus operator follows, otherwise it signals the start of a new assignment statement
@@ -125,7 +133,7 @@ public class Parser {
                 parseExpression(); // If not an ID, it must be a '+'' (was verified in parseIDOrAssignOp), continue parsing expression
             }
         } else {
-            reportError("Expecting identifier or add operator");
+            reportError("Expecting identifier or add operator on line 1.");
         }
     }
 
@@ -146,16 +154,26 @@ public class Parser {
      * @param message the appropriate error message is pass in as a parameter
      */
     public void reportError(String message){
-        System.out.println(message + " on line ");
+        System.out.println(message + "\nInvalid Program");
         System.exit(1);
     }
 
+    /**
+     * Checks if the end of file token has been reached
+     * If the end of file has been reached, the program has thrown no errors, and it is a valid program
+     * @param token token to be evaluated
+     */
     private void checkEof(Token token) {
         if ("EOF".equals(token.type)) {
             System.out.println("Valid Program");
             System.exit(1);
         }
     }
+
+    /**
+     * Calls the parser constructor and parses program
+     * @param args
+     */
     public static void main(String[]args) {
         Parser parser = new Parser();
         parser.parseProgram();
