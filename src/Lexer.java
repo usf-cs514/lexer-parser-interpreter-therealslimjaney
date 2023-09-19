@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 /**
  * Class to build an array of Tokens from an input file
+ *
  * @author wolberd
  * @see Token
  * @see Parser
@@ -15,7 +16,9 @@ import java.util.Scanner;
 public class Lexer {
 
     String buffer;
-    int index = 0;
+
+    int lexerIndex = 0;
+
     public static final String INTTOKEN = "INT";
     public static final String IDTOKEN = "ID";
     public static final String ASSMTTOKEN = "ASSMT";
@@ -28,13 +31,12 @@ public class Lexer {
 
 
     /**
-     * call getInput to get the file data into our buffer
-     *
+     * Creates a new instance of Lexer class
      * @param fileName the file we open
      */
     public Lexer(String fileName) {
 
-        getInput(fileName);
+        getInput(fileName); // call getInput to get the file data into our buffer
     }
 
     /**
@@ -57,39 +59,41 @@ public class Lexer {
 
     /**
      * Gets the next token in a file
-     * Should have no parameters
+     *
+     * @return returns the next token object in the buffer
      */
     public Token getNextToken() {
-        if (index == buffer.length()) {
+        // First check if we have reached the end of file to avoid out of bounds error
+        if (lexerIndex == buffer.length()) {
             return new Token(EOFTOKEN, "-");
         } else {
-            while (index < buffer.length()) {
-                char ch = buffer.charAt(index);
+            while (lexerIndex < buffer.length()) {
+                char ch = buffer.charAt(lexerIndex);
                 if (Character.isLetter(ch)) {
-                    index++;
-                    return new Token(IDTOKEN, getIdentifier(index));
+                    lexerIndex++;
+                    return new Token(IDTOKEN, getIdentifier(lexerIndex-1));
                 } else if (Character.isDigit(ch)) {
-                    index++;
-                    return new Token(INTTOKEN, getInteger(index));
+                    lexerIndex++;
+                    return new Token(INTTOKEN, getInteger(lexerIndex-1));
                 } else if (ch == '=') {
-                    index++;
+                    lexerIndex++;
                     return new Token(ASSMTTOKEN, "=");
                 } else if (ch == '+') {
-                    index++;
+                    lexerIndex++;
                     return new Token(PLUSTOKEN, "+");
                 } else if (ch == '*') {
-                    index++;
+                    lexerIndex++;
                     return new Token(MULTOKEN, "*");
                 } else if (ch == '-') {
-                    index++;
+                    lexerIndex++;
                     return new Token(SUBTOKEN, "-");
                 } else if (ch == '/') {
-                    index++;
+                    lexerIndex++;
                     return new Token(DIVTOKEN, "/");
                 } else if (ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t') { //Skip whitespace, new lines and tabs
-                    index++;
+                    lexerIndex++;
                 } else {
-                    index++;
+                    lexerIndex++;
                     return new Token(UNKNOWN, Character.toString(ch));
                 }
             }
@@ -97,91 +101,108 @@ public class Lexer {
         return new Token(EOFTOKEN, "-");
     }
 
-
-        private String getIdentifier(int startIndex) {
-            while (index <= buffer.length()){
-                if (index == buffer.length()) {
-                    return buffer.substring(startIndex - 1, index);
-                } else {
-                    char ch = buffer.charAt(index);
-                    if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
-                        index++;
-                    } else {
-                        return buffer.substring(startIndex - 1, index);
-
-                    }
-                }
-            }
-            return null;
-        }
-
-
-        private String getInteger(int startIndex) {
-            while (index <= buffer.length()) {
-                if (index == buffer.length()) {
-                    return buffer.substring(startIndex - 1, index);
-                } else {
-                    char ch = buffer.charAt(index);
-                    if (Character.isDigit(ch)) {
-                        index++;
-                    } else {
-                        return buffer.substring(startIndex - 1, index);
-                    }
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Return all the token in the file
-         * @return ArrayList of Token
-         */
-        public ArrayList<Token> getAllTokens() {
-            //TODO: place your code here for lexing file
-            ArrayList<Token> tokens = new ArrayList<Token>();
-            while (true) {
-                Token nextToken = getNextToken();
-                tokens.add(nextToken);
-                if ("EOF".equals(nextToken.type)) {
-                    break;
-                }
-            }
-            return tokens;
-        }
-
-
-        /**
-         * Before your run this starter code
-         * Select Run | Edit Configurations from the main menu.
-         * In Program arguments add the name of file you want to test (e.g., test.txt)
-         * @param args args[0]
-         */
-        public static void main (String[]args){
-            String fileName = "";
-            if (args.length == 0) {
-                System.out.println("You can test a different file by adding as an argument");
-                System.out.println("See comment above main");
-                System.out.println("For this run, test.txt used");
-                fileName = "test.txt";
+    /**
+     * Retrieves an identifier from the buffer starting at the given startIndex
+     * An identifier consists of letters and digits and is terminated by a character that is not a letter or digit
+     *
+     * @param startIndex the starting lexerIndex from which to begin searching for the identifier in buffer (lexerIndex-1 of buffer is sent in)
+     * @return the identifier found in the buffer, or null if no valid identifier is found (null should never be returned)
+     */
+    private String getIdentifier(int startIndex) { // lexerIndex-1 is passed in as startIndex parameter so startIndex is preserved to create substring after incrementing lexerIndex in method
+        // Iterate through the buffer
+        while (lexerIndex <= buffer.length()) {
+            // If we reach the end of the buffer return the substring from startIndex to the end
+            if (lexerIndex == buffer.length()) {
+                return buffer.substring(startIndex, lexerIndex);
             } else {
+                char ch = buffer.charAt(lexerIndex);
+                // Check if the character is a letter or digit
+                if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
+                    lexerIndex++; // If it is incrementlexerIndex, while startIndex is preserved
+                } else {
+                    return buffer.substring(startIndex, lexerIndex); // If not, return the substring as identifier
 
-                fileName = args[0];
+                }
             }
-
-            /**
-            Lexer lexer = new Lexer(fileName);
-            // just print out the text from the file
-            System.out.println(lexer.buffer);
-            // here is where you'll call getAllTokens
-            System.out.print(lexer.getAllTokens());
-            */
-
         }
+        return null; // Should not be reached
+    }
 
+    /**
+     * Retrieves an integer from the buffer starting at the given startIndex
+     * An integer is defined as a sequence of digits (0-9)
+     *
+     * @param startIndex the starting lexerIndex from which to begin searching for the integer (lexerIndex-1 of buffer is sent in)
+     * @return the integer found in the buffer, or null if no valid integer is found (null should never be returned)
+     */
+
+    private String getInteger(int startIndex) { // lexerIndex-1 is passed in as startIndex parameter so startIndex is preserved to create substring after incrementing lexerIndex
+        // Iterate through the buffer
+        while (lexerIndex <= buffer.length()) {
+            // If we reached the end of the buffer, return the substring from startIndex to the end
+            if (lexerIndex == buffer.length()) {
+                return buffer.substring(startIndex, lexerIndex);
+            } else {
+                char ch = buffer.charAt(lexerIndex);
+                // Check if the character is a digit (0-9)
+                if (Character.isDigit(ch)) {
+                    lexerIndex++; // If it is increment lexerIndex, while startIndex is preserved
+                } else {
+                    return buffer.substring(startIndex, lexerIndex); // If not, return the substring as integer
+                }
+            }
+        }
+        return null; // Should not be reached
+    }
+
+    /**
+     * Returns all the tokens in the file
+     *
+     * @return ArrayList of Tokens
+     */
+    public ArrayList<Token> getAllTokens() {
+        // Create an ArrayList objext to store tokens
+        ArrayList<Token> tokens = new ArrayList<Token>();
+
+        // Retrieve Tokens until we reach the end of a file
+        while (true) {
+            Token nextToken = getNextToken();
+            tokens.add(nextToken);
+            if ("EOF".equals(nextToken.type)) {
+                break;
+            }
+        }
+        return tokens;
     }
 
 
-/**- Lexer should have a getNextToken method with no params that returns a single token
- - Lexer should have private methods for getIdentifier and getInteger, called by getNextToken,
- that return a token and fill in value.
- */
+
+    /**
+     * Before you run this starter code
+     * Select Run | Edit Configurations from the main menu.
+     * In Program arguments add the name of file you want to test (e.g., test.txt)
+     * @param args args[0]
+     */
+
+    public static void main (String[]args){
+
+        String fileName = "";
+        if (args.length == 0) {
+            System.out.println("You can test a different file by adding as an argument");
+            System.out.println("See comment above main");
+            System.out.println("For this run, test.txt used");
+            fileName = "test.txt";
+        } else {
+
+            fileName = args[0]; // Use configuration file
+        }
+
+        Lexer lexer = new Lexer(fileName); // fileName can be set in Run configuration
+        // Print out the text from the file
+        System.out.println(lexer.buffer);
+        // Call getAllTokens
+        System.out.print(lexer.getAllTokens());
+
+    }
+
+}

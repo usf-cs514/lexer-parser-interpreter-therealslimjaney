@@ -1,41 +1,48 @@
-// This class tracks the identifiers within a program
-//
-//When an identifier appears on the left-hand-side of an assignment statement, add it to the IdTable
-//When an identifier appears on the right-hand-side of an assignment statement, check the IdTable to see if the identifier has been defined (it is an error if not).
-
-import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * The IdTable class tracks the identifiers within a program
+ * When an identifier appears as the subject of an assignment operation, it is added to the IdTable
+ * When an identifier appears as a term in the assignment expression, the IdTable is checked to see if it is defined
+ * @author jeswingler
+ */
+
 public class IdTable {
+
     HashMap<String, Integer> idTable;
     int addressCounter;
-    //a hashmap data member with String key and Integer value
-    /**The keys are the identifiers and the values represent the address in
-    memory in which the identifier will be stored (if an interpreter were built)
-     You can also just think of it as the order the ids appear- the first id will
-     have address 0, the second id will have address 1, and so on.*/
+
+    /**
+     * Creates a new instance of IdTable class
+     *
+     */
+
     public IdTable() {
         idTable = new HashMap<>();
-        addressCounter=-1;
+        addressCounter = 0; // Set to -1 so that ...
     }
 
-    public void add(String value) {
-        idTable.putIfAbsent(value, addressCounter+1);
+    /**
+     * Adds an entry to the idTable if it is absent
+     * @param token id the identifier value is sent
+     */
+    public void add(Token token) {
+        idTable.putIfAbsent(token.value, addressCounter);
+        addressCounter++;
+
     }
 
+    /**
+     * Checks the address associated with an id
+     * @param value the value if the id
+     * @return the address of the id, -1 if ot found
+     */
     public int getAddress(String value) {
-        // this method returns the address associated with an id, or -1 if not found.
         int address = idTable.get(value);
         return address;
     }
 
-    @Override
     public String toString() {
         return idTable.toString();
     }
 }
-    /**
-    private String toString() {
-        return table;
-    }
-     */

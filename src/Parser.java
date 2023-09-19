@@ -1,133 +1,163 @@
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Objects;
-// Parser: Determines if a statement or statements is valid based on the expected structure of those statements, and displays an error if not.
 
-/** BNF
- * <assignment-stmt> : <identifier> = <arithmetic-expr>
- *     <arithmetic-expr> : <term> | <arithmetic-expr> + <term>
- *         <term>: <identifier> | <integer>
+/**
+ * Parser class determines if statements are valid based on the expected structure (syntax) of the language and returns an error if not
+ *
+ * @author jeswingler
  */
 
-// Use a recursive descent parsing scheme: define a ParseX method for each particular “part of speech”.
-// For example, parseAssignOp will be called when you are expecting a token of type “AssignOp”.
 public class Parser {
-     //data member for IdTable (required)
-    int listIndex=0;
-    ArrayList<Token> tList; //Data member for token list is required by spec
-    IdTable tableObj; //Also required by spec
-    int line = 0; // This is where the error is
 
-    //TODO implement Parser class here
-    public Parser(){
-        Lexer lexer = new Lexer("test.txt");
-        tList = lexer.getAllTokens();
-        tableObj = new IdTable();
+    IdTable parsIdTable;
+    ArrayList<Token> parsTokenList; // Data member for token list is required by spec
+    int parsIndex = 0;
+    /**
+     * Creates an instance of the Parser class
+     */
+    public Parser() {
+        parsIdTable = new IdTable();
+        Lexer parsLexer = new Lexer("testMultiplePlus.txt");
+        parsTokenList = parsLexer.getAllTokens();
     }
 
-
+    /**
+     * Parses the program by calling parseAssignment on a loop until an error is found or the end of the list of tokens is reached
+     */
     private void parseProgram() {
-        //this method drives the process and parses an entire program.
-        // This method should call parseAssignment within a loop.
-        while (listIndex < tList.size()) {
-            Token token = tList.get(listIndex);
+        while (parsIndex < parsTokenList.size()) {
+            Token token = parsTokenList.get(parsIndex);
             String tokenType = token.type;
+            // Check if the end of file has been reached
             if (!"EOF".equals(tokenType)) {
                 parseAssignment();
+            } else {
+                System.out.println("Valid program.");
+                System.exit(1);
             }
         }
-        System.out.println("Valid Program");
     }
 
+    /**
+     * Parses a single assignment statement of structure: <identifier> <=> <expression>
+     * Calls parseID, parseAssignOp and parseExpression
+     */
     private void parseAssignment() {
-        // this method should parse a single assignment statement (LHS=RHS)
-        // it should call parseId, parseAssignmentOp, and parseExpression.
-            if (parseId()) {
-                tableObj.add((tList.get(listIndex-1)).value); //This is the problem. the listIndex has been incremented, you are adding the next token, not the ID
-                if (parseAssignOp()) {
-                    parseExpression();
-                } else {
-                    //error: expecting assignment operator
-                    reportError("Expecting assignment operator");
-                }
+        if (parseId()) {
+            // parseId has called nextToken which incremented the parsIndex, to ensure the correct token is checked and added to idTable, use index (parsIndex-1)
+            parsIdTable.add(parsTokenList.get(parsIndex-1));
+            if (parseAssignOp()) {
+                parseExpression();
             } else {
-                reportError("Expecting identifier");
-                //error: expecting identifier
+                reportError("Expecting assignment operator");
             }
+        } else {
+            reportError("Expecting identifier");
         }
+    }
 
-
-    // This method parses a single identifier
+    /**
+     * Parses a single identifier
+     * @return boolean true or false
+     */
     private boolean parseId() {
         String tokenType = nextToken().type;
         return tokenType.equals("ID");
     }
 
-    //this method parses a single assignment operator
+    /**
+     * Parses a single assignment operator ('=')
+     * @return boolean true or false
+     */
     private boolean parseAssignOp() {
         String tokenType = nextToken().type;
-        return "ASSMT".equals(tokenType);
+        return tokenType.equals("ASSMT");
     }
 
-    // This method checks if it is an ID or INT. it must be this if it follows a + or follows a =
-    private boolean parseIdOrInt() {
-        String tokenType = nextToken().type;
+    /**
+     * Determines if a token is an ID or INT
+     * @param token to be evaluated
+     * @return boolean true or false
+     */
+    private boolean parseIdOrInt(Token token) {
+        String tokenType = token.type;
         if ("ID".equals(tokenType) || "INT".equals(tokenType)) {
             return true;
         }
         return false;
     }
 
+    private boolean parseIdOrOp(Token token) {
+        String tokenType = token.type;
+        if ("ID".equals(tokenType) || "PLUS".equals(tokenType)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void parseExpression() {
-        if (parseIdOrInt()) {
-            String tokenType = tList.get(listIndex-1).type; // have to deincrement listIndex
-            String tokenValue = tList.get(listIndex-1).value; //
-            if ("ID".equals(tokenType)) {
-                if (tableObj.getAddress(tokenValue) == -1) {
+
+        // Checks that first term is an id or int
+        Token token = nextToken();
+        // Checks that first term is an id or int
+        if (parseIdOrInt(token)) {
+            if ("ID".equals(token.type)) {
+                // Check if the ID is defined in parsIdTable
+                if (!parsIdTable.idTable.containsKey(token.value)) {
                     reportError("Identifier not defined");
                 }
             }
         } else {
             reportError("Expecting identifier or integer");
         }
-        Token t2 = nextToken();
-        String tokenType2 = t2.type;
-        if ("PLUS".equals(tokenType2)) {
-            parseExpression();
-        } else if ("ID".equals(tokenType2)) {
-            listIndex--;
-            parseAssignment();
+
+        // The expression will continue being parsed if a plus operator follows, otherwise it signals the start of a new assignment statement
+        // Check what kind the next token is before calling nextToken and incrementing index
+        Token tokenN = parsTokenList.get(parsIndex);
+        //Check if EOF
+        checkEof(tokenN);
+        if (parseIdOrOp(tokenN)) {
+            // If Id, call parse assignment (a new assignment statement)
+            if ("ID".equals(tokenN.type)) {
+                parseAssignment();
+            } else {
+                nextToken(); // No need to catch this because we know it is an AssignOp
+                parseExpression(); // If not an ID, it must be a '+'' (was verified in parseIDOrAssignOp), continue parsing expression
+            }
+        } else {
+            reportError("Expecting identifier or add operator");
         }
     }
 
-        //this method gets the next token in the list and increments the index.
-        private Token nextToken() {
-            Token token = tList.get(listIndex);
-            listIndex++;
-            return token;
-        }
 
-        // private String toString() {
-        // }
-        //
-        public void reportError (String message){
-            System.out.println(message + " on line ");
+    /**
+     * Gets the next token in the list and increments index
+     * @return the next token
+     */
+    private Token nextToken() {
+        Token token = parsTokenList.get(parsIndex);
+        parsIndex++;
+        return token;
+    }
+
+    /**
+     * Outputs an error message to the console and terminates program
+     *
+     * @param message the appropriate error message is pass in as a parameter
+     */
+    public void reportError(String message){
+        System.out.println(message + " on line ");
+        System.exit(1);
+    }
+
+    private void checkEof(Token token) {
+        if ("EOF".equals(token.type)) {
+            System.out.println("Valid Program");
             System.exit(1);
         }
-        public static void main (String[]args){
-            Parser parser = new Parser();
-            parser.parseProgram();
-        }
-
+    }
+    public static void main(String[]args) {
+        Parser parser = new Parser();
+        parser.parseProgram();
+    }
 }
-
-/**
- * The Parser should find and report the following errors:
- *
- * - Expecting identifier
- * - Expecting assignment operator
- * - Expecting identifier or integer
- * - Expecting identifier or add operator
- * - Identifier not defined
-*/
