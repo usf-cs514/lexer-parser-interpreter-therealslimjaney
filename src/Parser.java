@@ -7,23 +7,29 @@ import java.util.ArrayList;
  */
 
 public class Parser {
-    // I am making a 2D array list to store my complete statements
-    // The statements will take the form <ID> = <Expression>
-    ArrayList<ArrayList<Token>> validAssignments = new ArrayList<>();
-   // Create start and end index variables of valid assignment statements in token list
-    int startIndex =0;
-    int endIndex =0;
 
-    IdTable parsIdTable; // need to figure out how to make this private
-    private ArrayList<Token> parsTokenList; // Data member for token list is required by spec
+    // Initialise parsIndex variable that keeps track of the index location of the program in the token list data member
     private int parsIndex = 0;
+
+   // Initialise start and end index variables used to extract and store valid assignment statements from token list
+    private int startIndex = 0;
+    private int endIndex = 0;
+
+    private IdTable parsIdTable; // need to figure out how to make this private
+    private ArrayList<Token> parsTokenList; // Data member for token list as required by spec
+
+    // 2D array list to stores valid statements in the form <ID> = <Expression>
+    private ArrayList<ArrayList<Token>> validAssignments;
+
     /**
      * Creates an instance of the Parser class
+     * Enter the fileName argument of lexer here
      */
     public Parser() {
         parsIdTable = new IdTable();
-        Lexer parsLexer = new Lexer("testMultiplePlus.txt");
+        Lexer parsLexer = new Lexer("testExpectingId2.txt"); // Lexer is created in Parser constructor as required by project specification
         parsTokenList = parsLexer.getAllTokens();
+        validAssignments = new ArrayList<>();
     }
 
     /**
@@ -32,13 +38,11 @@ public class Parser {
     private void parseProgram() {
         while (parsIndex < parsTokenList.size()) {
             Token token = parsTokenList.get(parsIndex);
-            String tokenType = token.type;
-            // Check if the end of file has been reached
-            if (!"EOF".equals(tokenType)) {
+            if (!checkEof(token)) {
                 parseAssignment();
             } else {
-                System.out.println("Valid program.");
-                System.exit(1);
+                parsIndex++; // Increment the index for EOF token to terminate loop
+                validProgram();
             }
         }
     }
@@ -49,9 +53,9 @@ public class Parser {
      */
     private void parseAssignment() {
         if (parseId()) {
-            // parseId has called nextToken which incremented the parsIndex, to ensure the correct token is checked and added to idTable, use index (parsIndex-1)
-            parsIdTable.add(parsTokenList.get(parsIndex-1));
-            startIndex = parsIndex-1;
+            // Add the ID token to the idTable
+            parsIdTable.add(parsTokenList.get(parsIndex-1)); // Use parsIndex-1 to add the ID (parseID has called nextToken, which increments parsIndex)
+            startIndex = parsIndex-1; // Set startIndex of a valid assignment statement
             if (parseAssignOp()) {
                 parseExpression();
             } else {
@@ -81,38 +85,9 @@ public class Parser {
     }
 
     /**
-     * Determines if a token is an ID or INT
-     * @param token to be evaluated
-     * @return boolean true or false
-     */
-    private boolean parseIdOrInt(Token token) {
-        String tokenType = token.type;
-        if ("ID".equals(tokenType) || "INT".equals(tokenType)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determines if a token is an ID or a '+' Op
-     * @param token token to be evaluated
-     * @return boolean true or false
-     */
-    private boolean parseIdOrOp(Token token) {
-        String tokenType = token.type;
-        if ("ID".equals(tokenType) || "PLUS".equals(tokenType)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Parses the expression on the right hand side of an assignment statement
      */
     private void parseExpression() {
-
-        // Checks that first term is an id or int
         Token token = nextToken();
         // Checks that first term is an id or int
         if (parseIdOrInt(token)) {
@@ -126,31 +101,44 @@ public class Parser {
             reportError("Error: Expecting identifier or integer, line 1.");
         }
 
-        // The expression will continue being parsed if a plus operator follows, otherwise it signals the start of a new assignment statement
-        // Check what kind the next token is before calling nextToken and incrementing index
+        // Determine the next token type
         Token tokenN = parsTokenList.get(parsIndex);
 
-        if (checkEof(tokenN)) {
+        if (checkEof(tokenN)) { // Check if the end of file has been reached, store assignment
             endIndex = parsIndex;
             storeAssignment(startIndex, endIndex);
-            validProgram();
-        }
-        if (parseIdOrOp(tokenN)) {
-            // If Id, call parse assignment (a new assignment statement)
-            if ("ID".equals(tokenN.type)) {
+        } else if (parseIdOrOp(tokenN)) { //Determine is an ID or assignment operator
+            if ("ID".equals(tokenN.type)) { // An ID indicates the start of a new assignment statement, store assignment
                 endIndex = parsIndex;
                 storeAssignment(startIndex, endIndex);
-                parseAssignment();
-            } else {
-                nextToken(); // No need to catch this because we know it is an AssignOp
-                parseExpression(); // If not an ID, it must be a '+'' (was verified in parseIDOrAssignOp), continue parsing expression
+            } else { // Is an assignment operator
+                nextToken(); // Call nextToken to increment parsIndex to account for the assignment operator
+                parseExpression(); // Continue parsing expression
             }
-        } else {
+        } else { // Neither ID or assignment operator
             reportError("Expecting identifier or add operator on line 1.");
         }
     }
 
+    /**
+     * Determines if a token is an ID or INT
+     * @param token to be evaluated
+     * @return boolean true or false
+     */
+    private boolean parseIdOrInt(Token token) {
+        String tokenType = token.type;
+        return ("ID".equals(tokenType) || "INT".equals(tokenType));
+    }
 
+    /**
+     * Determines if a token is an ID or a '+' Op
+     * @param token token to be evaluated
+     * @return boolean true or false
+     */
+    private boolean parseIdOrOp(Token token) {
+        String tokenType = token.type;
+        return ("ID".equals(tokenType) || "PLUS".equals(tokenType));
+    }
     /**
      * Gets the next token in the list and increments index
      * @return the next token
@@ -160,7 +148,6 @@ public class Parser {
         parsIndex++;
         return token;
     }
-
     /**
      * Outputs an error message to the console and terminates program
      *
@@ -170,7 +157,6 @@ public class Parser {
         System.out.println(message + "\nInvalid Program");
         System.exit(1);
     }
-
     /**
      * Checks if the end of file token has been reached
      * If the end of file has been reached, the program has thrown no errors, and it is a valid program
@@ -179,7 +165,6 @@ public class Parser {
     private boolean checkEof(Token token) {
         return ("EOF".equals(token.type));
     }
-
     /**
      * This method captures a valid assignment statement and stores it in an ArrayList
      * The assignment is added to the 2D ArrayList of valid assignments
@@ -193,11 +178,37 @@ public class Parser {
         }
         validAssignments.add(assignment);
     }
+    /**
+     * Takes in a 2D ArrayList of valid statements and determines commands and operands for each
+     * Calls generate method from the ByteCodeInterpreter class to modify bytecode data member of the ByteCodeInterpreter instance
+     * @param validAssignments
+     */
+
+    // Jane this MUST take in a bytecode object because the generate method called inside this must be called on the bytecode data member of an object
+    private void generateByteCode(ArrayList<ArrayList<Token>> validAssignments, ByteCodeInterpreter interp) {
+        //Iterate through outer loop of validAssignments
+        for (ArrayList<Token> statement : validAssignments) { //Outer loop
+            //Iterate through RHS of each valid statement
+            for (int i = 2; i < statement.size(); i++) { // From third in statement
+                String operand = (statement.get(i)).value;
+                if (operand.equals("+")) {
+                    continue;
+                } else if (operand.matches("\\d+")) { //This will return false if there is anything other than numerics in the string
+                    interp.generate(interp.LOADI, Integer.parseInt(operand));
+                } else {
+                    int operandAddress = parsIdTable.getAddress(operand);
+                    interp.generate((interp.LOAD), operandAddress);
+                }
+            }
+            // Evaluate the LHS variable
+            interp.generate(interp.STORE, parsIdTable.getAddress(statement.get(0).value));
+        }
+    }
 
     private void validProgram() {
         System.out.println(validAssignments);
+        System.out.println(parsIdTable);
         System.out.println("Valid Program");
-        System.exit(1);
     }
     /**
      * Calls the parser constructor and parses program
@@ -206,5 +217,11 @@ public class Parser {
     public static void main(String[]args) {
         Parser parser = new Parser();
         parser.parseProgram();
+        ByteCodeInterpreter interpreter = new ByteCodeInterpreter(10);
+        parser.generateByteCode(parser.validAssignments, interpreter);
+        System.out.println("Bytecode: ");
+        System.out.println(interpreter.bytecode);
+        System.out.println("Memory: ");
+
     }
 }

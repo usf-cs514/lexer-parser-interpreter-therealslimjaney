@@ -118,7 +118,7 @@ public class Lexer {
                 char ch = buffer.charAt(lexerIndex);
                 // Check if the character is a letter or digit
                 if ((Character.isLetter(ch)) || (Character.isDigit(ch))) {
-                    lexerIndex++; // If it is incrementlexerIndex, while startIndex is preserved
+                    lexerIndex++; // If it is increment lexerIndex, while startIndex is preserved
                 } else {
                     return buffer.substring(startIndex, lexerIndex); // If not, return the substring as identifier
 
