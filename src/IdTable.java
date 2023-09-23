@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class IdTable {
 
-    HashMap<String, Integer> idTable; // need to figure out how to make private
+    private HashMap<String, Integer> idTable; // need to figure out how to make private
     private int addressCounter;
 
     /**
@@ -38,8 +38,12 @@ public class IdTable {
      * @return the address of the id, -1 if ot found
      */
     public int getAddress(String value) {
-        int address = idTable.get(value);
-        return address;
+        if (idTable.containsKey(value)) {
+            int address = idTable.get(value);
+            return address;
+        } else {
+            return -1;
+        }
     }
 
     public String toString() {

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Parser class determines if statements are valid based on the expected structure (syntax) of the language and returns an error if not
@@ -27,7 +28,7 @@ public class Parser {
      */
     public Parser() {
         parsIdTable = new IdTable();
-        Lexer parsLexer = new Lexer("testExpectingId2.txt"); // Lexer is created in Parser constructor as required by project specification
+        Lexer parsLexer = new Lexer("test.txt"); // Lexer is created in Parser constructor as required by project specification
         parsTokenList = parsLexer.getAllTokens();
         validAssignments = new ArrayList<>();
     }
@@ -93,7 +94,7 @@ public class Parser {
         if (parseIdOrInt(token)) {
             if ("ID".equals(token.type)) {
                 // Check if the ID is defined in parsIdTable
-                if (!parsIdTable.idTable.containsKey(token.value)) {
+                if (parsIdTable.getAddress(token.value) == -1) {
                     reportError("Error: Identifier not defined, line 1.");
                 }
             }
@@ -206,9 +207,8 @@ public class Parser {
     }
 
     private void validProgram() {
-        System.out.println(validAssignments);
-        System.out.println(parsIdTable);
         System.out.println("Valid Program");
+        System.out.println(validAssignments);
     }
     /**
      * Calls the parser constructor and parses program
@@ -219,9 +219,10 @@ public class Parser {
         parser.parseProgram();
         ByteCodeInterpreter interpreter = new ByteCodeInterpreter(10);
         parser.generateByteCode(parser.validAssignments, interpreter);
+        interpreter.run();
         System.out.println("Bytecode: ");
-        System.out.println(interpreter.bytecode);
+        System.out.println(interpreter.getBytecode());
         System.out.println("Memory: ");
-
+        System.out.println(interpreter.getMemory());
     }
 }
