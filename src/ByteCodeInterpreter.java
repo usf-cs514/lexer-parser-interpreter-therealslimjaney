@@ -83,16 +83,15 @@ public class ByteCodeInterpreter {
                             break;
                         case 2:
                             int addr2 = bytecode.get(i + 1);
-                            store(addr2);
-                            break;
+                            if (addr2 < memorySize) {
+                                store(addr2);
+                            } else {
+                                System.out.println("Error: Address out of range.");
+                                return;
+                            }
                     }
                 }
             }
-
-
-
-        // System.out.println("OUT OF BOUNDS");
-        //System.exit(1);
 
         // private methods for each command type, run will call these.
         private void load( int addr) {
@@ -106,14 +105,9 @@ public class ByteCodeInterpreter {
 
         private void store(int address) {
             //add to appropriate address/index in memory array
-                if (address < memorySize) {
                     memory.set(address, accumulator);
-                } else {
-                    System.out.println("Out of Bounds.");
-                    System.exit(1);
-                }
-                accumulator = 0;
-            }
+                    accumulator = 0;
+        }
 
         public static void main() {
         }

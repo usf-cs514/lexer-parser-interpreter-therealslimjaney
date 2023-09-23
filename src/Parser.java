@@ -15,6 +15,7 @@ public class Parser {
    // Initialise start and end index variables used to extract and store valid assignment statements from token list
     private int startIndex = 0;
     private int endIndex = 0;
+    private int line = 1;
 
     private IdTable parsIdTable; // need to figure out how to make this private
     private ArrayList<Token> parsTokenList; // Data member for token list as required by spec
@@ -28,7 +29,7 @@ public class Parser {
      */
     public Parser() {
         parsIdTable = new IdTable();
-        Lexer parsLexer = new Lexer("test.txt"); // Lexer is created in Parser constructor as required by project specification
+        Lexer parsLexer = new Lexer("testOutOfBounds.txt"); // Lexer is created in Parser constructor as required by project specification
         parsTokenList = parsLexer.getAllTokens();
         validAssignments = new ArrayList<>();
     }
@@ -60,10 +61,10 @@ public class Parser {
             if (parseAssignOp()) {
                 parseExpression();
             } else {
-                reportError("Error: Expecting assignment operator, line 1.");
+                reportError("Error: Expecting assignment operator, line " + line);
             }
         } else {
-            reportError("Error: Expecting identifier, line 1.");
+            reportError("Error: Expecting identifier, line " + line);
         }
     }
 
@@ -95,11 +96,11 @@ public class Parser {
             if ("ID".equals(token.type)) {
                 // Check if the ID is defined in parsIdTable
                 if (parsIdTable.getAddress(token.value) == -1) {
-                    reportError("Error: Identifier not defined, line 1.");
+                    reportError("Error: Identifier not defined, line " + line);
                 }
             }
         } else {
-            reportError("Error: Expecting identifier or integer, line 1.");
+            reportError("Error: Expecting identifier or integer, line " + line);
         }
 
         // Determine the next token type
@@ -117,7 +118,7 @@ public class Parser {
                 parseExpression(); // Continue parsing expression
             }
         } else { // Neither ID or assignment operator
-            reportError("Expecting identifier or add operator on line 1.");
+            reportError("Expecting identifier or add operator, line " + line);
         }
     }
 
@@ -173,6 +174,7 @@ public class Parser {
      * @param endIndex
      */
     private void storeAssignment(int startIndex, int endIndex) {
+        line++;
         ArrayList<Token> assignment = new ArrayList<>();
         for (int i = startIndex; i < endIndex; i++) { // end index is exclusive
             assignment.add(parsTokenList.get(i));
@@ -208,7 +210,6 @@ public class Parser {
 
     private void validProgram() {
         System.out.println("Valid Program");
-        System.out.println(validAssignments);
     }
     /**
      * Calls the parser constructor and parses program
@@ -220,9 +221,8 @@ public class Parser {
         ByteCodeInterpreter interpreter = new ByteCodeInterpreter(10);
         parser.generateByteCode(parser.validAssignments, interpreter);
         interpreter.run();
-        System.out.println("Bytecode: ");
-        System.out.println(interpreter.getBytecode());
-        System.out.println("Memory: ");
-        System.out.println(interpreter.getMemory());
+        System.out.println("Symbol Table: " + parser.parsIdTable);
+        System.out.println("Bytecode: " + interpreter.getBytecode());
+        System.out.println("Memory: " + interpreter.getMemory());
     }
 }
