@@ -23,16 +23,16 @@ public class Lexer {
     public static final String IDTOKEN = "ID";
     public static final String ASSMTTOKEN = "ASSMT";
     public static final String PLUSTOKEN = "PLUS";
-    public static final String UNKNOWN = "UNKNOWN"; // I added this
-    public static final String EOFTOKEN = "EOF"; // I added this
-    public static final String MULTOKEN = "MULT"; // I added this
-    public static final String DIVTOKEN = "DIV"; // I added this
-    public static final String SUBTOKEN = "SUB"; // I added this
+    public static final String UNKNOWN = "UNKNOWN";
+    public static final String EOFTOKEN = "EOF";
+    public static final String MULTOKEN = "MULT";
+    public static final String DIVTOKEN = "DIV";
+    public static final String SUBTOKEN = "SUB";
 
 
     /**
      * Creates a new instance of Lexer class
-     * @param fileName the file we open
+     * @param fileName the file taken in as input
      */
     public Lexer(String fileName) {
 
@@ -58,12 +58,12 @@ public class Lexer {
     }
 
     /**
-     * Gets the next token in a file
+     * Gets the next token from buffer
      *
      * @return returns the next token object in the buffer
      */
     public Token getNextToken() {
-        // First check if we have reached the end of file to avoid out of bounds error
+        // Check if we have reached the end of file to avoid out of bounds error
         if (lexerIndex == buffer.length()) {
             return new Token(EOFTOKEN, "-");
         } else {
@@ -161,7 +161,7 @@ public class Lexer {
      * @return ArrayList of Tokens
      */
     public ArrayList<Token> getAllTokens() {
-        // Create an ArrayList objext to store tokens
+        // Create an ArrayList object to store tokens
         ArrayList<Token> tokens = new ArrayList<Token>();
 
         // Retrieve Tokens until we reach the end of a file
@@ -175,15 +175,37 @@ public class Lexer {
         return tokens;
     }
 
+    /**
+     * Returns a string representation of the Lexer object, including its buffer content.
+     * @return A string
+     */
+    @Override
+    public String toString() {
+        return "Lexer{" +
+                "buffer='" + buffer + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lexer lexer = (Lexer) o;
+        return lexerIndex == lexer.lexerIndex && Objects.equals(buffer, lexer.buffer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(buffer, lexerIndex);
+    }
 
     /**
+     * The entry point for the lexer class
      * Before you run this starter code
      * Select Run | Edit Configurations from the main menu.
      * In Program arguments add the name of file you want to test (e.g., test.txt)
      * @param args args[0]
      */
-
     public static void main (String[]args){
 
         String fileName = "";
@@ -196,13 +218,6 @@ public class Lexer {
 
             fileName = args[0]; // Use configuration file
         }
-
-        Lexer lexer = new Lexer(fileName); // fileName can be set in Run configuration
-        // Print out the text from the file
-        System.out.println(lexer.buffer);
-        // Call getAllTokens
-        System.out.print(lexer.getAllTokens());
-
     }
 
 }

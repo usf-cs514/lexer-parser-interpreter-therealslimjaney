@@ -4,13 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Complete. Must add line numbers for errors">
-      <change afterPath="$PROJECT_DIR$/testOutOfBounds.txt" afterDir="false" />
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Finished">
+      <change afterPath="$PROJECT_DIR$/unknown.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/IdTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/IdTable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Parser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Token.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Token.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ByteCodeInterpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ByteCodeInterpreter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IdTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IdTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testWhitespace.txt" beforeDir="false" afterPath="$PROJECT_DIR$/testWhitespace.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,8 +95,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ParserTest" />
         <item itemvalue="JUnit.Lexer" />
+        <item itemvalue="Application.ParserTest" />
       </list>
     </recent_temporary>
   </component>
@@ -310,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695441590461</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Final before comment edits">
+      <option name="closed" value="true" />
+      <created>1695443574716</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1695443574716</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -325,7 +340,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rough beginnings" />
     <MESSAGE value="Changed strategy to a while loop approach" />
     <MESSAGE value="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files." />
     <MESSAGE value="Working on test.txt" />
@@ -349,7 +363,9 @@
     <MESSAGE value="Created a 2D array to store assignment statements in Parser." />
     <MESSAGE value="Part 1 complete, part 2 complaete, part 3 bytecode complete. Still to do --&gt; interpreter" />
     <MESSAGE value="Complete. Must add line numbers for errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="Complete. Must add line numbers for errors" />
+    <MESSAGE value="Final before comment edits" />
+    <MESSAGE value="Finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

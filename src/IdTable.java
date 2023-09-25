@@ -6,7 +6,6 @@ import java.util.HashMap;
  * When an identifier appears as a term in the assignment expression, the IdTable is checked to see if it is defined
  * @author jeswingler
  */
-
 public class IdTable {
 
     private HashMap<String, Integer> idTable; // need to figure out how to make private
@@ -16,7 +15,6 @@ public class IdTable {
      * Creates a new instance of IdTable class
      *
      */
-
     public IdTable() {
         idTable = new HashMap<>();
         addressCounter = 0;
@@ -46,7 +44,13 @@ public class IdTable {
         }
     }
 
+    /**
+     * Returns a string representation of the idTable
+     * @return A string
+     */
     public String toString() {
         return idTable.toString();
     }
 }
+
+
