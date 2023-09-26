@@ -9,13 +9,13 @@ import java.util.Objects;
  * Represents a Byte Code Interpreter that processes and executes a simple bytecode program.
  */
 public class ByteCodeInterpreter {
-    private ArrayList<Integer> bytecode; //req
-    private ArrayList<Integer> memory; //req
+    private ArrayList<Integer> bytecode;
+    private ArrayList<Integer> memory;
     final int LOAD = 0;
     final int LOADI = 1;
     final int STORE = 2;
-    private int accumulator = 0; //private is required here
-    private int memorySize; //private is required here
+    private int accumulator = 0;
+    private int memorySize;
 
     /**
      * Constructs a ByteCodeInterpreter object with a specified memory size.
@@ -97,7 +97,7 @@ public class ByteCodeInterpreter {
                 }
             }
 
-        /**
+            /**
         * Loads the value at the specified memory address into the accumulator.
         * @param addr the memory address from which to load the value.
         */
@@ -109,7 +109,7 @@ public class ByteCodeInterpreter {
         * Loads an immediate value into the accumulator.
         * @param val the immediate value to load into the accumulator.
         */
-        private void loadI( int val) {
+        private void loadI(int val) {
             accumulator += val;
         }
 
@@ -123,17 +123,17 @@ public class ByteCodeInterpreter {
                     accumulator = 0;
         }
 
+    /**Compares this ByteCodeInterpreter object to the specified object
+     *
+     * @param o
+     * @return True if the given object is equal to this ByteCodeInterpreter; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ByteCodeInterpreter that = (ByteCodeInterpreter) o;
         return LOAD == that.LOAD && LOADI == that.LOADI && STORE == that.STORE && accumulator == that.accumulator && memorySize == that.memorySize && Objects.equals(bytecode, that.bytecode) && Objects.equals(memory, that.memory);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bytecode, memory, LOAD, LOADI, STORE, accumulator, memorySize);
     }
 
     /**

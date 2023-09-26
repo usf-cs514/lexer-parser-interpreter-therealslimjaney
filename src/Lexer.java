@@ -7,9 +7,8 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /**
- * Class to build an array of Tokens from an input file
+ * Class to build an array of tokens from an input file
  *
- * @author wolberd
  * @see Token
  * @see Parser
  */
@@ -106,7 +105,7 @@ public class Lexer {
      * An identifier consists of letters and digits and is terminated by a character that is not a letter or digit
      *
      * @param startIndex the starting lexerIndex from which to begin searching for the identifier in buffer (lexerIndex-1 of buffer is sent in)
-     * @return the identifier found in the buffer, or null if no valid identifier is found (null should never be returned)
+     * @return the identifier found in the buffer
      */
     private String getIdentifier(int startIndex) { // lexerIndex-1 is passed in as startIndex parameter so startIndex is preserved to create substring after incrementing lexerIndex in method
         // Iterate through the buffer
@@ -186,6 +185,12 @@ public class Lexer {
                 '}';
     }
 
+    /**
+     *
+     * Compares this Lexer object to the specified object
+     * @param o The object to compare this Lexer against.
+     * @return True if the given object is equal to this Lexer; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -194,16 +199,9 @@ public class Lexer {
         return lexerIndex == lexer.lexerIndex && Objects.equals(buffer, lexer.buffer);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(buffer, lexerIndex);
-    }
-
     /**
      * The entry point for the lexer class
-     * Before you run this starter code
-     * Select Run | Edit Configurations from the main menu.
-     * In Program arguments add the name of file you want to test (e.g., test.txt)
+     * If a valid file name is not given, the user is prompted to enter a string
      * @param args args[0]
      */
     public static void main (String[]args){

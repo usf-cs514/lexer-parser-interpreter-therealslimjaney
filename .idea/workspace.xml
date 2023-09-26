@@ -4,20 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Finished">
-      <change afterPath="$PROJECT_DIR$/unknown.txt" afterDir="false" />
+    <list default="true" id="cc4b19b0-6d21-41bf-8ae7-31b24aad4caf" name="Changes" comment="Edited to handle x = x + 3 stack overflow error">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/IdTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/IdTable.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Lexer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Parser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/LexerParserStarter/Token.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/LexerParserStarter/Token.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ByteCodeInterpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ByteCodeInterpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IdTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IdTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Token.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testWhitespace.txt" beforeDir="false" afterPath="$PROJECT_DIR$/testWhitespace.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unknown.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +55,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Parser">
+  <component name="RunManager" selected="Application.ParserTest">
     <configuration name="Parser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Parser" />
       <module name="LexerParserStarter" />
@@ -95,8 +89,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.Lexer" />
         <item itemvalue="Application.ParserTest" />
+        <item itemvalue="JUnit.Lexer" />
       </list>
     </recent_temporary>
   </component>
@@ -325,7 +319,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695443574716</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Edited to handle x = x + 3 stack overflow error">
+      <option name="closed" value="true" />
+      <created>1695670759504</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1695670759504</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -340,7 +342,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changed strategy to a while loop approach" />
     <MESSAGE value="I have it working until the last token. The last token is printed as &quot;-&quot; because my condition for end of file gets reached in the get identifier method. I need to make the getIdentifier method and the getInteger method capture the last tokens at the end of files." />
     <MESSAGE value="Working on test.txt" />
     <MESSAGE value="I added to getNextToken, to skip new line characters along with whitespace" />
@@ -365,7 +366,8 @@
     <MESSAGE value="Complete. Must add line numbers for errors" />
     <MESSAGE value="Final before comment edits" />
     <MESSAGE value="Finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished" />
+    <MESSAGE value="Edited to handle x = x + 3 stack overflow error" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edited to handle x = x + 3 stack overflow error" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

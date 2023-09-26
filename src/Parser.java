@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Parser class determines if statements are valid based on the expected structure (syntax) of the language and returns an error if not
@@ -29,7 +30,7 @@ public class Parser {
      */
     public Parser() {
         parsIdTable = new IdTable();
-        Lexer parsLexer = new Lexer("test.txt"); // Lexer is created in Parser constructor as required by project specification
+        Lexer parsLexer = new Lexer("unknown.txt"); // Lexer is created in Parser constructor as required by project specification
         parsTokenList = parsLexer.getAllTokens();
         validAssignments = new ArrayList<>();
     }
@@ -97,8 +98,9 @@ public class Parser {
                 // Check if the ID is defined in parsIdTable
                 if (parsIdTable.getAddress(token.value) == -1) {
                     reportError("Error: Identifier not defined, line " + line);
-                } else if (((parsTokenList.get(startIndex)).value).equals(token.value)) {
-                    reportError("StackOverflowError: identifier in expression not defined, line " + line);
+                    // Check if it is a self referencing variable not yet declared
+                } else if (selfRef(token)) {
+                    reportError("StackOverflowError: identifier in expression not defined, line " + line); // If a self referencing variable not yet declared, it would cause an infinite loop abd stackoverflow error
                 }
             }
         } else {
@@ -162,6 +164,30 @@ public class Parser {
         Token token = parsTokenList.get(parsIndex);
         parsIndex++;
         return token;
+    }
+
+    /**
+     * Check if an ID on the rhs of an assignment statement is a self referenced variable, not yet initialised
+     *
+     * @param token token to be evaluated
+     * @return boolean true or false
+     */
+    private boolean selfRef(Token token) {
+        String rhsId = token.value; // the value of the ID in the expression (RHS of assignment statement)
+        String lhsId = parsTokenList.get(startIndex).value; // the value of the ID that is the subject of the assignment statement (LHS)
+        // Check if the current token's value is the same as the identifier being referenced in the expression
+        if (rhsId.equals(lhsId)) {
+            // Then check if the subject of assignment statement is itself undeclared in validAssignments 2D ArrayList
+            for (ArrayList<Token> assignment : validAssignments) {
+                String idValue = assignment.get(0).value; // the LHS ID is always at index 0 in validAssignments assignments
+                if (idValue.equals(lhsId)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -230,8 +256,36 @@ public class Parser {
     }
 
     /**
+     * Returns a string representation of parser
+     * @return String of the token list and valid assignments arraylist
+     */
+    @Override
+    public String toString() {
+        return "Parser{" +
+                "parsTokenList=" + parsTokenList +
+                ", validAssignments=" + validAssignments +
+                '}';
+    }
+
+    /**
+     *
+     * Compares this Parser object to the specified object
+     *
+     * @param o The object to compare this Parser against.
+     * @return True if the given object is equal to this Parser; false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Parser parser = (Parser) o;
+        return parsIndex == parser.parsIndex && startIndex == parser.startIndex && endIndex == parser.endIndex && line == parser.line && Objects.equals(parsIdTable, parser.parsIdTable) && Objects.equals(parsTokenList, parser.parsTokenList) && Objects.equals(validAssignments, parser.validAssignments);
+    }
+
+    /**
      * Entry point for the lexer-parser-interpreter package
      * Calls the parser constructor and parses program
+     * NOTE: filename argument can be entered as parameter of lexer object in Parser constructor
      * @param args
      */
     public static void main(String[]args) {
